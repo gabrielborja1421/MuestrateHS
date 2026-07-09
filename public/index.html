@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muestrate - Creador de Landing Pages</title>
+  <!-- Google Fonts loaded dynamically by JS but pre-loaded default ones -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- ========================================================== -->
+  <!-- 1. LANDING PAGE DEL CLIENTE (VISTA PÚBLICA & PREVIEW)      -->
+  <!-- ========================================================== -->
+  <div id="client-view" class="client-container">
+    <!-- Navbar -->
+    <header class="navbar" id="view-navbar">
+      <div class="nav-container">
+        <div class="logo-wrapper" id="view-logo-container">
+          <a href="#" class="logo" id="view-logo-text">Mi Negocio</a>
+        </div>
+        <nav class="nav-menu" id="nav-menu">
+          <a href="#inicio">Inicio</a>
+          <a href="#ventajas" id="nav-link-features">Ventajas</a>
+          <a href="#carrusel" id="nav-link-carousel">Galería</a>
+          <a href="#servicios" id="nav-link-products">Productos</a>
+          <a href="#videos" id="nav-link-videos">Videos</a>
+          <a href="#opiniones" id="nav-link-reviews">Reseñas</a>
+          <a href="#contacto" class="cta-button" id="view-cta-nav">Contáctanos</a>
+        </nav>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero-section" id="view-hero">
+      <div class="hero-bg-overlay" id="view-hero-overlay"></div>
+      <div class="hero-content" id="view-hero-content">
+        <div class="hero-logo-wrapper" id="view-hero-logo-container" style="display: none;"></div>
+        <h1 id="view-hero-title">Título del Negocio</h1>
+        <p id="view-hero-subtitle">Subtítulo o propuesta de valor llamativa para atraer clientes.</p>
+        <div class="hero-buttons">
+          <a href="#servicios" class="btn btn-primary" id="view-cta-hero">Ver Catálogo</a>
+          <a href="#opiniones" class="btn btn-outline" id="view-secondary-hero">Opiniones</a>
+        </div>
+        <div class="hero-social-buttons" id="view-hero-social" style="display: none;"></div>
+      </div>
+    </section>
+
+    <!-- Features Section (¿Por qué elegirnos?) -->
+    <section id="ventajas" class="features-section">
+      <div class="section-container">
+        <h2 class="section-title">¿Por qué elegirnos?</h2>
+        <p class="section-subtitle" id="view-about-desc">Ofrecemos la mejor calidad y servicio personalizado en cada uno de nuestros proyectos.</p>
+        
+        <div class="features-grid" id="features-list-container">
+          <!-- Features will be loaded dynamically by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Carousel Section -->
+    <section id="carrusel" class="carousel-section">
+      <div class="section-container">
+        <h2 class="section-title">Galería de Trabajos</h2>
+        <p class="section-subtitle">Echa un vistazo a nuestros proyectos y materiales recientes.</p>
+        
+        <div class="carousel-wrapper">
+          <div class="carousel-container" id="carousel-track">
+            <!-- Carousel items loaded dynamically -->
+          </div>
+          <button class="carousel-arrow prev" id="carousel-prev"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="carousel-arrow next" id="carousel-next"><i class="fa-solid fa-chevron-right"></i></button>
+          <div class="carousel-dots" id="carousel-dots-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products / Services Section -->
+    <section id="servicios" class="products-section">
+      <div class="section-container">
+        <h2 class="section-title">Productos y Servicios</h2>
+        <p class="section-subtitle">Explora nuestras soluciones y solicita una cotización personalizada.</p>
+        
+        <div class="products-grid" id="products-list-container">
+          <!-- Products loaded dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Videos Gallery Section -->
+    <section id="videos" class="videos-section">
+      <div class="section-container">
+        <h2 class="section-title">Galería de Videos</h2>
+        <p class="section-subtitle">Conoce nuestros procesos de fabricación y grabado en vivo.</p>
+        
+        <div class="videos-grid" id="videos-list-container">
+          <!-- Videos loaded dynamically by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews / Testimonials Section -->
+    <section id="opiniones" class="reviews-section">
+      <div class="section-container">
+        <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+        
+        <!-- Score Overview -->
+        <div class="rating-overview-card" id="view-rating-card">
+          <div class="average-score">
+            <span class="number" id="view-average-rating">0.0</span>
+            <div class="stars" id="view-average-stars"></div>
+            <span class="total-reviews" id="view-total-reviews-count">Basado en 0 reseñas</span>
+          </div>
+        </div>
+
+        <div class="reviews-grid" id="reviews-list-container">
+          <!-- Reviews loaded dynamically -->
+        </div>
+
+        <!-- Add Review Form -->
+        <div class="add-review-container" id="view-review-form-card">
+          <h3>Déjanos tu reseña</h3>
+          <p>Tu opinión es muy importante para nosotros. Comparte tu experiencia.</p>
+          <form id="add-review-form" class="review-form">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="rev-name">Nombre Completo</label>
+                <input type="text" id="rev-name" placeholder="Ej. Juan Pérez" required>
+              </div>
+              <div class="form-group">
+                <label for="rev-contact">Correo o Teléfono (Privado para el dueño)</label>
+                <input type="text" id="rev-contact" placeholder="Ej. juan@mail.com o 5512345678" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Calificación</label>
+              <div class="star-rating-input">
+                <input type="radio" id="star5" name="rating-input" value="5" /><label for="star5" title="5 estrellas"><i class="fa-solid fa-star"></i></label>
+                <input type="radio" id="star4" name="rating-input" value="4" /><label for="star4" title="4 estrellas"><i class="fa-solid fa-star"></i></label>
+                <input type="radio" id="star3" name="rating-input" value="3" /><label for="star3" title="3 estrellas"><i class="fa-solid fa-star"></i></label>
+                <input type="radio" id="star2" name="rating-input" value="2" /><label for="star2" title="2 estrellas"><i class="fa-solid fa-star"></i></label>
+                <input type="radio" id="star1" name="rating-input" value="1" /><label for="star1" title="1 estrella"><i class="fa-solid fa-star"></i></label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="rev-comment">Tu Comentario</label>
+              <textarea id="rev-comment" rows="4" placeholder="Escribe aquí tu reseña sobre nuestro servicio..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="view-submit-review">Publicar Reseña</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-section" id="contacto" style="background-color: var(--footer-bg);">
+      <div class="footer-container">
+        <div class="footer-info">
+          <h3 id="view-footer-title">Mi Negocio</h3>
+          <p id="view-footer-desc">Grabado láser, corte e impresión 3D a tu alcance.</p>
+          <!-- Social Icons in Footer -->
+          <div class="footer-social" id="view-footer-social">
+            <!-- Dynamic Social icons -->
+          </div>
+        </div>
+        <div class="footer-contact">
+          <h4>Contacto</h4>
+          <p><i class="fa-solid fa-envelope"></i> <span id="view-contact-email">correo@negocio.com</span></p>
+          <p><i class="fa-solid fa-phone"></i> <span id="view-contact-phone">55-1234-5678</span></p>
+          <p><i class="fa-solid fa-location-dot"></i> <span id="view-contact-address">Dirección del negocio</span></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="footer-year">2026</span> <span id="view-copyright-name">Mi Negocio</span>. Todos los derechos reservados.</p>
+        <a href="/admin" class="admin-login-link"><i class="fa-solid fa-user-gear"></i> Acceso Admin</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- 2. INTERFAZ DE ADMINISTRACIÓN Y EDICIÓN (ADMIN VIEW)       -->
+  <!-- ========================================================== -->
+  <div id="admin-view" class="admin-container" style="display: none;">
+    
+    <!-- A. SECCIÓN LOGIN / REGISTRO -->
+    <div id="login-section" class="auth-section">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <i class="fa-solid fa-palette"></i>
+          <h2>Muestrate Builder</h2>
+          <p>Personaliza tu web con el poder de WordPress</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form">
+          <div class="form-group">
+            <label for="login-businessId">ID de tu Negocio</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-link"></i>
+              <input type="text" id="login-businessId" placeholder="Ej. HardSoft" required>
+            </div>
+            <span class="input-tip">URL: muestrate.com.mx/TuNegocio</span>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Contraseña</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="login-password" placeholder="Ingresa tu contraseña" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+          <p class="auth-switch">¿No tienes cuenta? <a href="#" id="show-register">Registra tu negocio</a></p>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" style="display: none;">
+          <div class="form-group">
+            <label for="reg-businessId">ID del Negocio (Solo letras/números)</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-link"></i>
+              <input type="text" id="reg-businessId" placeholder="Ej. HardSoft" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Contraseña</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="reg-password" placeholder="Crea una contraseña" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="reg-title">Nombre Comercial</label>
+            <input type="text" id="reg-title" placeholder="Ej. HardSoft" required>
+          </div>
+          <div class="form-group">
+            <label for="reg-subtitle">Lema del Negocio</label>
+            <input type="text" id="reg-subtitle" placeholder="Ej. Grabado e Impresión 3D">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Crear Cuenta</button>
+          <p class="auth-switch">¿Ya tienes cuenta? <a href="#" id="show-login">Inicia sesión</a></p>
+        </form>
+      </div>
+    </div>
+
+    <!-- B. PÁGINA DIVIDIDA DEL EDITOR -->
+    <div id="editor-workspace" class="workspace-layout" style="display: none;">
+      
+      <!-- Panel de Control Izquierdo -->
+      <aside class="sidebar-editor">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header">
+          <div class="editor-title">
+            <i class="fa-solid fa-sliders"></i>
+            <div>
+              <h3 id="admin-business-title">HardSoft</h3>
+              <p>Personalización Avanzada</p>
+            </div>
+          </div>
+          <button id="logout-btn" class="btn-logout" title="Cerrar Sesión">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+
+        <!-- Editor Tabs Navigation -->
+        <nav class="editor-tabs">
+          <button class="tab-btn active" data-tab="tab-diseno">
+            <i class="fa-solid fa-palette"></i> Diseño
+          </button>
+          <button class="tab-btn" data-tab="tab-info">
+            <i class="fa-solid fa-file-pen"></i> General
+          </button>
+          <button class="tab-btn" data-tab="tab-ventajas">
+            <i class="fa-solid fa-star"></i> Ventajas
+          </button>
+          <button class="tab-btn" data-tab="tab-productos">
+            <i class="fa-solid fa-box"></i> Catálogo
+          </button>
+          <button class="tab-btn" data-tab="tab-videos">
+            <i class="fa-solid fa-video"></i> Videos
+          </button>
+          <button class="tab-btn" data-tab="tab-resenas">
+            <i class="fa-solid fa-comments"></i> Reseñas
+          </button>
+        </nav>
+
+        <!-- Editor Tabs Contents -->
+        <div class="tab-container">
+          
+          <!-- TAB 1: DISEÑO Y ESTILOS -->
+          <div id="tab-diseno" class="tab-content active">
+            <h4>Estética y Tipografía</h4>
+            
+            <div class="form-group">
+              <label for="edit-font-family">Fuente Tipográfica</label>
+              <select id="edit-font-family">
+                <option value="Plus Jakarta Sans">Plus Jakarta Sans (Moderna)</option>
+                <option value="Outfit">Outfit (Tecnológica/Limpia)</option>
+                <option value="Montserrat">Montserrat (Llamativa/Negrita)</option>
+                <option value="Playfair Display">Playfair Display (Elegante/Lujo)</option>
+                <option value="Inter">Inter (Limpia/Minimalista)</option>
+                <option value="Lora">Lora (Clásica/Serif)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-button-style">Estilo de Botones</label>
+              <select id="edit-button-style">
+                <option value="rounded">Bordes Redondeados</option>
+                <option value="pill">Píldora (Redondos)</option>
+                <option value="sharp">Bordes Rectos (Sharp)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-page-layout">Estructura de la Página (Plantilla)</label>
+              <select id="edit-page-layout">
+                <option value="classic">Clásica (Secuencial)</option>
+                <option value="gallery">Portafolio (Galería Primero)</option>
+                <option value="products">Tienda (Catálogo Primero)</option>
+                <option value="minimal">Corporativo (Videos Primero)</option>
+              </select>
+            </div>
+
+            <h4>Dimensiones y Tamaños</h4>
+            
+            <div class="form-group">
+              <label for="edit-logo-size">Tamaño de Logo Superior (Menú)</label>
+              <select id="edit-logo-size">
+                <option value="small">Pequeño (Compacto)</option>
+                <option value="medium">Mediano (Normal)</option>
+                <option value="large">Grande (Destacado)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-hero-logo-size">Tamaño de Logo Central (Portada)</label>
+              <select id="edit-hero-logo-size">
+                <option value="small">Pequeño (120px)</option>
+                <option value="medium">Mediano (180px)</option>
+                <option value="large">Grande (250px)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-card-size">Tamaño de Productos (Catálogo)</label>
+              <select id="edit-card-size">
+                <option value="small">Compacto</option>
+                <option value="medium">Normal (Estándar)</option>
+                <option value="large">Grande (Llamativo)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-font-size">Tamaño de Letra General</label>
+              <select id="edit-font-size">
+                <option value="small">Pequeña (14px)</option>
+                <option value="medium">Mediana (16px)</option>
+                <option value="large">Grande (18px)</option>
+              </select>
+            </div>
+
+            <h4>Paleta de Colores</h4>
+            
+            <div class="form-group">
+              <label for="edit-primary-color">Color de Énfasis (Primario)</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="edit-primary-color" value="#52750f">
+                <input type="text" id="edit-primary-color-text" value="#52750f" class="color-text-input">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-secondary-color">Color Secundario (Acentos)</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="edit-secondary-color" value="#84cc16">
+                <input type="text" id="edit-secondary-color-text" value="#84cc16" class="color-text-input">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-bg-color">Fondo de la Página</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="edit-bg-color" value="#f8fafc">
+                <input type="text" id="edit-bg-color-text" value="#f8fafc" class="color-text-input">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-text-color">Color de Texto General</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="edit-text-color" value="#0f172a">
+                <input type="text" id="edit-text-color-text" value="#0f172a" class="color-text-input">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-nav-bg">Fondo de Barra de Navegación</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="edit-nav-bg" value="#ffffff">
+                <input type="text" id="edit-nav-bg-text" value="#ffffff" class="color-text-input">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-footer-bg">Fondo del Pie de Página (Footer)</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="edit-footer-bg" value="#0f172a">
+                <input type="text" id="edit-footer-bg-text" value="#0f172a" class="color-text-input">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-card-bg">Fondo de Tarjetas (Catálogo)</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="edit-card-bg" value="#ffffff">
+                <input type="text" id="edit-card-bg-text" value="#ffffff" class="color-text-input">
+              </div>
+            </div>
+
+            <h4>Galería de Trabajos</h4>
+            <div class="form-group">
+              <label for="edit-carousel-type">Estructura de la Galería</label>
+              <select id="edit-carousel-type">
+                <option value="slide">Carrusel de Desplazamiento (Slide)</option>
+                <option value="fade">Carrusel Desvanecimiento (Fade)</option>
+                <option value="grid">Malla de Fotos Fija (Modern Grid)</option>
+                <option value="showcase">Visualizador con Miniaturas (Showcase)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="edit-carousel-height">Altura de la Galería</label>
+              <select id="edit-carousel-height">
+                <option value="aspect">Proporcional (16:9)</option>
+                <option value="300px">Pequeña (300px)</option>
+                <option value="400px">Mediana (400px)</option>
+                <option value="500px">Grande (500px)</option>
+                <option value="600px">Extra Grande (600px)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Imágenes del Carrusel (Fotos)</label>
+              <div class="input-list">
+                <div class="input-list-item">
+                  <span>Foto 1</span>
+                  <div class="file-upload-wrapper">
+                    <input type="text" id="edit-carousel-img-0" placeholder="URL o sube foto">
+                    <input type="file" id="upload-carousel-0" accept="image/*" class="file-input-hidden" style="display: none;">
+                    <button type="button" class="btn-upload-trigger" title="Subir foto" onclick="document.getElementById('upload-carousel-0').click()">
+                      <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="input-list-item">
+                  <span>Foto 2</span>
+                  <div class="file-upload-wrapper">
+                    <input type="text" id="edit-carousel-img-1" placeholder="URL o sube foto">
+                    <input type="file" id="upload-carousel-1" accept="image/*" class="file-input-hidden" style="display: none;">
+                    <button type="button" class="btn-upload-trigger" title="Subir foto" onclick="document.getElementById('upload-carousel-1').click()">
+                      <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="input-list-item">
+                  <span>Foto 3</span>
+                  <div class="file-upload-wrapper">
+                    <input type="text" id="edit-carousel-img-2" placeholder="URL o sube foto">
+                    <input type="file" id="upload-carousel-2" accept="image/*" class="file-input-hidden" style="display: none;">
+                    <button type="button" class="btn-upload-trigger" title="Subir foto" onclick="document.getElementById('upload-carousel-2').click()">
+                      <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h4>Visibilidad de Secciones</h4>
+            <div class="switch-list">
+              <label class="switch-item">
+                <input type="checkbox" id="sec-visible-features" checked>
+                <span>Ventajas Competitivas</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" id="sec-visible-carousel" checked>
+                <span>Galería Carrusel</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" id="sec-visible-products" checked>
+                <span>Catálogo de Productos</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" id="sec-visible-reviews" checked>
+                <span>Opiniones y Reseñas</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" id="sec-visible-videos" checked>
+                <span>Galería de Videos</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" id="sec-visible-herologo" checked>
+                <span>Logotipo en Portada (Hero)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- TAB 2: INFORMACIÓN GENERAL -->
+          <div id="tab-info" class="tab-content">
+            <h4>Identidad del Negocio</h4>
+            
+            <div class="form-group">
+              <label for="edit-title">Nombre Comercial</label>
+              <input type="text" id="edit-title" placeholder="Ej. HardSoft">
+            </div>
+            
+            <div class="form-group">
+              <label for="edit-logo-url">Logotipo del Negocio (Imagen)</label>
+              <div class="file-upload-wrapper">
+                <input type="text" id="edit-logo-url" placeholder="URL de la imagen o sube un archivo">
+                <input type="file" id="upload-logo-file" accept="image/*" class="file-input-hidden" style="display: none;">
+                <button type="button" class="btn-upload-trigger" title="Subir foto desde PC" onclick="document.getElementById('upload-logo-file').click()">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                </button>
+              </div>
+              <span class="input-tip">Sugerencia: PNG con fondo transparente.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-logo-type">Mostrar en el Encabezado</label>
+              <select id="edit-logo-type">
+                <option value="both">Imagen y Nombre (Ambos)</option>
+                <option value="text">Solo Nombre (Texto)</option>
+                <option value="logo">Solo Imagen (Logotipo)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-subtitle">Slogan o Lema</label>
+              <input type="text" id="edit-subtitle" placeholder="Ej. Impresión 3D y Grabado Láser">
+            </div>
+
+            <div class="form-group">
+              <label for="edit-description">Descripción del Negocio</label>
+              <textarea id="edit-description" rows="4" placeholder="Quiénes somos y qué ofrecemos..."></textarea>
+            </div>
+
+            <h4>Diseño del Hero (Banner Principal)</h4>
+            
+            <div class="form-group">
+              <label for="edit-hero-bg-type">Tipo de Fondo del Hero</label>
+              <select id="edit-hero-bg-type">
+                <option value="color">Fondo de Color Sólido Oscuro</option>
+                <option value="gradient">Gradiente Moderno</option>
+                <option value="image">Imagen de Fondo (URL)</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="group-hero-bg-image" style="display: none;">
+              <label for="edit-hero-bg-image">Imagen de Fondo de Portada</label>
+              <div class="file-upload-wrapper">
+                <input type="text" id="edit-hero-bg-image" placeholder="URL de la imagen o sube un archivo">
+                <input type="file" id="upload-hero-file" accept="image/*" class="file-input-hidden" style="display: none;">
+                <button type="button" class="btn-upload-trigger" title="Subir foto" onclick="document.getElementById('upload-hero-file').click()">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group" id="group-hero-bg-color" style="display: none;">
+              <label for="edit-hero-bg-color">Color de Fondo de Portada</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="edit-hero-bg-color" value="#0f172a">
+                <input type="text" id="edit-hero-bg-color-text" value="#0f172a" class="color-text-input">
+              </div>
+            </div>
+
+            <div class="form-group" id="group-hero-bg-gradient" style="display: none;">
+              <label>Colores del Gradiente</label>
+              <div style="display: flex; gap: 12px; margin-top: 8px;">
+                <div style="flex: 1;">
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">Inicio</span>
+                  <div class="color-picker-wrapper" style="margin-top: 4px;">
+                    <input type="color" id="edit-hero-grad-start" value="#52750f">
+                    <input type="text" id="edit-hero-grad-start-text" value="#52750f" class="color-text-input" style="font-size: 0.8rem; padding: 4px 8px;">
+                  </div>
+                </div>
+                <div style="flex: 1;">
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">Fin</span>
+                  <div class="color-picker-wrapper" style="margin-top: 4px;">
+                    <input type="color" id="edit-hero-grad-end" value="#0f172a">
+                    <input type="text" id="edit-hero-grad-end-text" value="#0f172a" class="color-text-input" style="font-size: 0.8rem; padding: 4px 8px;">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-hero-align">Alineación del Texto</label>
+              <select id="edit-hero-align">
+                <option value="center">Centrado</option>
+                <option value="left">Alineado a la Izquierda</option>
+                <option value="right">Alineado a la Derecha</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-cta-text">Texto del Botón Principal (CTA)</label>
+              <input type="text" id="edit-cta-text" placeholder="Ej. Ver Catálogo">
+            </div>
+
+            <h4>Enlaces de Contacto</h4>
+            <div class="form-group">
+              <label for="edit-email">Correo Electrónico</label>
+              <input type="email" id="edit-email" placeholder="contacto@negocio.com">
+            </div>
+            <div class="form-group">
+              <label for="edit-phone">Teléfono de Negocio</label>
+              <input type="text" id="edit-phone" placeholder="5512345678">
+            </div>
+            <div class="form-group">
+              <label for="edit-address">Dirección del Local</label>
+              <input type="text" id="edit-address" placeholder="Calle Universidad #123, CDMX">
+            </div>
+
+            <h4>Redes Sociales (Footer)</h4>
+            <div class="form-group">
+              <label for="edit-social-whatsapp">WhatsApp (Número con código de país, ej. 525512345678)</label>
+              <input type="text" id="edit-social-whatsapp" placeholder="Ej. 525512345678">
+            </div>
+            <div class="form-group">
+              <label for="edit-social-facebook">URL de Facebook</label>
+              <input type="text" id="edit-social-facebook" placeholder="https://facebook.com/HardSoft">
+            </div>
+            <div class="form-group">
+              <label for="edit-social-instagram">URL de Instagram</label>
+              <input type="text" id="edit-social-instagram" placeholder="https://instagram.com/HardSoft">
+            </div>
+            <div class="form-group">
+              <label for="edit-social-twitter">URL de Twitter / X</label>
+              <input type="text" id="edit-social-twitter" placeholder="https://x.com/HardSoft">
+            </div>
+          </div>
+
+          <!-- TAB 3: CRUD VENTAJAS (FEATURES) -->
+          <div id="tab-ventajas" class="tab-content">
+            <div class="section-header-row">
+              <h4>Ventajas Competitivas</h4>
+              <button id="add-feature-btn" class="btn btn-sm btn-primary">
+                <i class="fa-solid fa-plus"></i> Nueva
+              </button>
+            </div>
+            
+            <div id="admin-features-list" class="admin-items-list">
+              <!-- Dynamically populated features list -->
+            </div>
+
+            <!-- Feature Form Drawer -->
+            <div id="feature-form-container" class="admin-form-drawer" style="display: none;">
+              <h5 id="feature-form-title">Agregar Ventaja</h5>
+              <input type="hidden" id="edit-feature-id">
+              <div class="form-group">
+                <label for="edit-feature-title">Título de la Ventaja</label>
+                <input type="text" id="edit-feature-title" placeholder="Ej. Calidad Garantizada" required>
+              </div>
+              <div class="form-group">
+                <label for="edit-feature-icon">Icono (FontAwesome)</label>
+                <select id="edit-feature-icon">
+                  <option value="fa-star">Estrella (fa-star)</option>
+                  <option value="fa-clock">Reloj/Rapidez (fa-clock)</option>
+                  <option value="fa-user-shield">Escudo/Garantía (fa-user-shield)</option>
+                  <option value="fa-thumbs-up">Me gusta (fa-thumbs-up)</option>
+                  <option value="fa-tag">Etiqueta/Precio (fa-tag)</option>
+                  <option value="fa-heart">Corazón (fa-heart)</option>
+                  <option value="fa-gear">Engrane/Tecnología (fa-gear)</option>
+                  <option value="fa-gem">Gema/Exclusivo (fa-gem)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="edit-feature-desc">Descripción Corta</label>
+                <textarea id="edit-feature-desc" rows="3" placeholder="Describe brevemente esta ventaja..."></textarea>
+              </div>
+              <div class="form-actions-row">
+                <button type="button" id="cancel-feature-btn" class="btn btn-outline btn-sm">Cancelar</button>
+                <button type="button" id="save-feature-btn" class="btn btn-primary btn-sm">Guardar Ventaja</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: CRUD PRODUCTOS -->
+          <div id="tab-productos" class="tab-content">
+            <div class="section-header-row">
+              <h4>Catálogo de Productos</h4>
+              <button id="add-product-btn" class="btn btn-sm btn-primary">
+                <i class="fa-solid fa-plus"></i> Nuevo
+              </button>
+            </div>
+            
+            <div id="admin-products-list" class="admin-items-list">
+              <!-- Dynamically populated products list -->
+            </div>
+
+            <!-- Product Form Drawer -->
+            <div id="product-form-container" class="admin-form-drawer" style="display: none;">
+              <h5 id="product-form-title">Agregar Producto</h5>
+              <input type="hidden" id="edit-product-id">
+              <div class="form-group">
+                <label for="edit-product-name">Nombre del Producto</label>
+                <input type="text" id="edit-product-name" placeholder="Ej. Grabado en Madera" required>
+              </div>
+              <div class="form-group">
+                <label for="edit-product-price">Precio ($)</label>
+                <input type="number" id="edit-product-price" placeholder="Ej. 150" step="0.01" required>
+              </div>
+              <div class="form-group">
+                <label for="edit-product-image">Imagen del Producto</label>
+                <div class="file-upload-wrapper">
+                  <input type="text" id="edit-product-image" placeholder="URL de la imagen o sube un archivo">
+                  <input type="file" id="upload-product-file" accept="image/*" class="file-input-hidden" style="display: none;">
+                  <button type="button" class="btn-upload-trigger" title="Subir foto" onclick="document.getElementById('upload-product-file').click()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="edit-product-desc">Descripción</label>
+                <textarea id="edit-product-desc" rows="3" placeholder="Detalles del producto..."></textarea>
+              </div>
+              <div class="form-actions-row">
+                <button type="button" id="cancel-product-btn" class="btn btn-outline btn-sm">Cancelar</button>
+                <button type="button" id="save-product-btn" class="btn btn-primary btn-sm">Guardar Producto</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: CRUD VIDEOS -->
+          <div id="tab-videos" class="tab-content">
+            <div class="section-header-row">
+              <h4>Galería de Videos</h4>
+              <button id="add-video-btn" class="btn btn-sm btn-primary">
+                <i class="fa-solid fa-plus"></i> Nuevo
+              </button>
+            </div>
+            
+            <div id="admin-videos-list" class="admin-items-list">
+              <!-- Dynamically populated videos list -->
+            </div>
+
+            <!-- Video Form Drawer -->
+            <div id="video-form-container" class="admin-form-drawer" style="display: none;">
+              <h5 id="video-form-title">Agregar Video</h5>
+              <input type="hidden" id="edit-video-id">
+              <div class="form-group">
+                <label for="edit-video-title">Título del Video</label>
+                <input type="text" id="edit-video-title" placeholder="Ej. Grabado Láser en Metal" required>
+              </div>
+              <div class="form-group">
+                <label for="edit-video-url">URL o Archivo de Video</label>
+                <div class="file-upload-wrapper">
+                  <input type="text" id="edit-video-url" placeholder="URL (YouTube/Vimeo) o sube archivo" required>
+                  <input type="file" id="upload-video-file" accept="video/*" class="file-input-hidden" style="display: none;">
+                  <button type="button" class="btn-upload-trigger" title="Subir video" onclick="document.getElementById('upload-video-file').click()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                  </button>
+                </div>
+                <span class="input-tip">Soporta enlaces de YouTube/Vimeo o subida de archivos MP4.</span>
+              </div>
+              <div class="form-group">
+                <label for="edit-video-desc">Descripción (Opcional)</label>
+                <textarea id="edit-video-desc" rows="3" placeholder="Detalles de la demostración..."></textarea>
+              </div>
+              <div class="form-actions-row">
+                <button type="button" id="cancel-video-btn" class="btn btn-outline btn-sm">Cancelar</button>
+                <button type="button" id="save-video-btn" class="btn btn-primary btn-sm">Guardar Video</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: MODERACIÓN RESEÑAS -->
+          <div id="tab-resenas" class="tab-content">
+            <h4>Moderación de Opiniones</h4>
+            <p class="tab-tip">Gestiona los comentarios de tus clientes y elimina las reseñas inapropiadas.</p>
+            
+            <div id="admin-reviews-list" class="admin-reviews-moderator-list">
+              <!-- Dynamically populated reviews list -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar Actions -->
+        <div class="sidebar-actions">
+          <button id="save-changes-btn" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+          </button>
+          <button id="export-page-btn" class="btn btn-success btn-block">
+            <i class="fa-solid fa-download"></i> Exportar Landing Page
+          </button>
+        </div>
+      </aside>
+
+      <!-- Panel de Vista Previa Derecho -->
+      <main class="preview-area">
+        <div class="preview-bar">
+          <div class="preview-devices">
+            <button class="device-btn active" data-device="desktop" title="Vista Escritorio">
+              <i class="fa-solid fa-desktop"></i>
+            </button>
+            <button class="device-btn" data-device="mobile" title="Vista Móvil">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+            </button>
+          </div>
+          <span class="preview-url-indicator">
+            <i class="fa-solid fa-globe"></i>
+            <span id="preview-url-text">muestrate.com.mx/HardSoft</span>
+          </span>
+        </div>
+        <div class="preview-frame-container" id="preview-frame-container">
+          <iframe id="preview-iframe" src="about:blank" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay" style="display: none;">
+    <div class="spinner"></div>
+    <p id="loading-text">Cargando...</p>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Client-side script -->
+  <script src="/js/app.js"></script>
+</body>
+</html>

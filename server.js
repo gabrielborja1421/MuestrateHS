@@ -593,7 +593,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Specific admin route
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'editor.html'));
 });
 
 // Dynamic business route
@@ -603,7 +603,7 @@ app.get('/:businessId', (req, res) => {
   const exists = Object.keys(db).find(k => k.toLowerCase() === businessId.toLowerCase());
 
   if (exists) {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'editor.html'));
   } else {
     // Redirect unrecognized subpaths to register or error page
     res.status(404).send('Negocio no encontrado. Por favor verifica la URL.');

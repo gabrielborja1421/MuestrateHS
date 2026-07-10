@@ -64,8 +64,6 @@ function initApp() {
     const businessId = path.substring(1).replace(/\/$/, '');
     if (businessId) {
       setupPublicClientView(businessId);
-    } else {
-      window.location.href = '/admin';
     }
   }
 }

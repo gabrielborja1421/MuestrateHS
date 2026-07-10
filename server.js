@@ -26,6 +26,18 @@ dbInstance.exec(`
   )
 `);
 
+// Seeder: Check if 'admin' user exists. If not, insert default admin/admin123
+const checkAdmin = dbInstance.prepare("SELECT id FROM businesses WHERE id = 'admin'").get();
+if (!checkAdmin) {
+  const insertAdmin = dbInstance.prepare(`
+    INSERT INTO businesses (id, password, isSuperAdmin)
+    VALUES (?, ?, 1)
+  `);
+  const defaultHash = bcrypt.hashSync('admin123', 10);
+  insertAdmin.run('admin', defaultHash);
+  console.log('Seeder: Usuario "admin" maestro creado por defecto con clave "admin123".');
+}
+
 app.use(cors());
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);

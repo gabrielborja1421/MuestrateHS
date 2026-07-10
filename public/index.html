@@ -478,7 +478,7 @@
         <p>Olvídate de servidores complejos o código. Te damos una herramienta visual paso a paso pensada para emprendedores.</p>
       </div>
       
-      <div class="features-grid">
+      <div class="features-grid" id="features-grid">
         <!-- Feature 1 -->
         <div class="feature-card">
           <div class="feature-icon">
@@ -558,7 +558,7 @@
         <p>Comienza a mostrar tu emprendimiento hoy mismo con el plan que mejor se adapte a ti.</p>
       </div>
       
-      <div class="pricing-grid">
+      <div class="pricing-grid" id="pricing-grid">
         <!-- Plan 1 -->
         <div class="pricing-card">
           <h3>Plan Básico</h3>
@@ -609,6 +609,77 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Load Muestrate HS (admin) platform homepage details
+      try {
+        const response = await fetch('/api/business/admin');
+        if (response.ok) {
+          const adminData = await response.json();
+          const info = adminData.info || {};
+          const theme = adminData.theme || {};
+          const features = adminData.features || [];
+          const products = adminData.products || []; // pricing plans
+
+          // Update page title & logo/text
+          if (info.title) {
+            document.title = `${info.title} | Crea tu Tarjeta de Presentación y Landing Page`;
+            document.querySelectorAll('.logo span').forEach(el => el.textContent = info.title);
+            document.querySelector('.footer-text').innerHTML = `&copy; ${new Date().getFullYear()} ${info.title}. Todos los derechos reservados.`;
+          }
+          if (info.subtitle) {
+            document.querySelector('.hero h1').innerHTML = info.subtitle.replace('\n', '<br>');
+          }
+          if (info.description) {
+            document.querySelector('.hero p').textContent = info.description;
+          }
+          
+          // Apply primary/secondary colors if defined
+          if (theme.primaryColor) {
+            document.documentElement.style.setProperty('--primary', theme.primaryColor);
+          }
+          if (theme.secondaryColor) {
+            document.documentElement.style.setProperty('--secondary', theme.secondaryColor);
+          }
+
+          // Update features grid
+          const featuresGrid = document.getElementById('features-grid');
+          if (featuresGrid && features.length > 0) {
+            featuresGrid.innerHTML = features.map(f => `
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <i class="fa-solid ${f.icon || 'fa-star'}"></i>
+                </div>
+                <h3>${f.title}</h3>
+                <p>${f.description}</p>
+              </div>
+            `).join('');
+          }
+
+          // Update pricing grid (from admin products)
+          const pricingGrid = document.getElementById('pricing-grid');
+          if (pricingGrid && products.length > 0) {
+            pricingGrid.innerHTML = products.map((p, idx) => {
+              const isPopular = idx === 1; // Mark second plan as recommended by default
+              return `
+                <div class="pricing-card ${isPopular ? 'popular' : ''}">
+                  <h3>${p.name}</h3>
+                  <p>${p.description.split('.')[0]}.</p>
+                  <div class="price">$${p.price} <span>/ ${p.price == 0 ? 'gratis' : 'mes (MXN)'}</span></div>
+                  <ul class="pricing-features">
+                    ${p.description.split('.').slice(1).filter(li => li.trim().length > 0).map(li => `
+                      <li><i class="fa-solid fa-circle-check"></i> ${li.trim()}</li>
+                    `).join('')}
+                  </ul>
+                  <a href="/admin" class="btn ${isPopular ? 'btn-primary' : 'btn-outline'}" style="width: 100%;">${p.price == 0 ? 'Comenzar Gratis' : 'Adquirir Premium'}</a>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+      } catch (err) {
+        console.error('Error al cargar datos de plataforma:', err);
+      }
+
+      // 2. Load client showcase
       try {
         const response = await fetch('/api/public/businesses');
         if (!response.ok) throw new Error('Error al cargar clientes');

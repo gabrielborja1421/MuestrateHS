@@ -27,15 +27,60 @@ dbInstance.exec(`
 `);
 
 // Seeder: Check if 'admin' user exists. If not, insert default admin/admin123
-const checkAdmin = dbInstance.prepare("SELECT id FROM businesses WHERE id = 'admin'").get();
+const checkAdmin = dbInstance.prepare("SELECT * FROM businesses WHERE id = 'admin'").get();
+
+const defaultTheme = JSON.stringify({
+  primaryColor: '#82b225',
+  secondaryColor: '#a3e635',
+  backgroundColor: '#090d16',
+  textColor: '#ffffff',
+  fontFamily: 'Plus Jakarta Sans'
+});
+
+const defaultInfo = JSON.stringify({
+  title: 'Muestrate HS',
+  subtitle: 'Tu negocio, en una sola página de presentación',
+  description: 'Crea tarjetas de presentación digitales y landing pages profesionales en 5 minutos. Sube tu catálogo de productos, recibe opiniones de clientes reales, añade tus redes sociales y edita todo en tiempo real.',
+  email: 'contacto@muestratehs.com',
+  phone: '55-1234-5678',
+  address: 'Ciudad de México',
+  ctaText: 'Crear mi Página',
+  socialFacebook: 'https://facebook.com',
+  socialInstagram: 'https://instagram.com'
+});
+
+const defaultFeatures = JSON.stringify([
+  { id: 'f1', title: 'Editor en Tiempo Real', icon: 'fa-palette', description: 'Cambia colores, fuentes y logos y mira el resultado al instante.' },
+  { id: 'f2', title: 'Catálogo de Productos', icon: 'fa-shop', description: 'Muestra tus artículos o servicios con su imagen, precio y descripción.' },
+  { id: 'f3', title: 'Asistente Guiado', icon: 'fa-wand-magic-sparkles', description: 'Nuestro asistente te guía rellenando la información paso a paso.' }
+]);
+
+const defaultProducts = JSON.stringify([
+  { id: 'p1', name: 'Plan Básico', price: 0, description: 'Ideal para probar. Incluye 1 Landing Page, 3 productos, contacto y WhatsApp.', image: '' },
+  { id: 'p2', name: 'Plan Emprendedor', price: 99, description: 'Productos ilimitados, asistente de configuración, reseñas y redes sociales.', image: '' }
+]);
+
 if (!checkAdmin) {
   const insertAdmin = dbInstance.prepare(`
-    INSERT INTO businesses (id, password, isSuperAdmin)
-    VALUES (?, ?, 1)
+    INSERT INTO businesses (id, password, isSuperAdmin, theme, info, features, products)
+    VALUES (?, ?, 1, ?, ?, ?, ?)
   `);
   const defaultHash = bcrypt.hashSync('admin123', 10);
-  insertAdmin.run('admin', defaultHash);
-  console.log('Seeder: Usuario "admin" maestro creado por defecto con clave "admin123".');
+  insertAdmin.run('admin', defaultHash, defaultTheme, defaultInfo, defaultFeatures, defaultProducts);
+  console.log('Seeder: Usuario "admin" maestro creado por defecto con clave "admin123" y datos de plataforma.');
+} else {
+  // If admin exists but has no configured platform title, seed it
+  let parsedInfo = {};
+  try { parsedInfo = JSON.parse(checkAdmin.info || '{}'); } catch(e){}
+  if (!parsedInfo.title) {
+    const updateAdmin = dbInstance.prepare(`
+      UPDATE businesses SET 
+        theme = ?, info = ?, features = ?, products = ?
+      WHERE id = 'admin'
+    `);
+    updateAdmin.run(defaultTheme, defaultInfo, defaultFeatures, defaultProducts);
+    console.log('Seeder: Datos de plataforma de Muestrate HS inyectados en la cuenta admin existente.');
+  }
 }
 
 app.use(cors());
@@ -60,23 +105,17 @@ function readDatabase() {
     const rows = query.all();
     const data = {};
     for (const row of rows) {
-      if (row.isSuperAdmin) {
-        data[row.id] = {
-          password: row.password,
-          isSuperAdmin: true
-        };
-      } else {
-        data[row.id] = {
-          password: row.password,
-          theme: JSON.parse(row.theme || '{}'),
-          info: JSON.parse(row.info || '{}'),
-          features: JSON.parse(row.features || '[]'),
-          carouselImages: JSON.parse(row.carouselImages || '[]'),
-          products: JSON.parse(row.products || '[]'),
-          reviews: JSON.parse(row.reviews || '[]'),
-          videos: JSON.parse(row.videos || '[]')
-        };
-      }
+      data[row.id] = {
+        password: row.password,
+        isSuperAdmin: row.isSuperAdmin ? true : false,
+        theme: JSON.parse(row.theme || '{}'),
+        info: JSON.parse(row.info || '{}'),
+        features: JSON.parse(row.features || '[]'),
+        carouselImages: JSON.parse(row.carouselImages || '[]'),
+        products: JSON.parse(row.products || '[]'),
+        reviews: JSON.parse(row.reviews || '[]'),
+        videos: JSON.parse(row.videos || '[]')
+      };
     }
     return data;
   } catch (error) {
@@ -147,8 +186,15 @@ function authenticateToken(req, res, next) {
   }
 
   const sessionBusinessId = activeSessions.get(authHeader);
-  if (!sessionBusinessId || sessionBusinessId.toLowerCase() !== businessId.toLowerCase()) {
-    return res.status(403).json({ error: 'Token inválido o expirado para este negocio.' });
+  if (!sessionBusinessId) {
+    return res.status(403).json({ error: 'Token inválido o expirado.' });
+  }
+
+  const isSelf = sessionBusinessId.toLowerCase() === businessId.toLowerCase();
+  const isAdmin = sessionBusinessId.toLowerCase() === 'admin';
+
+  if (!isSelf && !isAdmin) {
+    return res.status(403).json({ error: 'Token inválido o sin permisos para este negocio.' });
   }
 
   req.businessId = sessionBusinessId;

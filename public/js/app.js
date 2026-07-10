@@ -2438,6 +2438,15 @@ async function loadSuperAdminDashboard() {
     });
   }
 
+  // Bind master edit homepage button
+  const editHomepageBtn = document.getElementById('master-edit-homepage-btn');
+  if (editHomepageBtn) {
+    editHomepageBtn.replaceWith(editHomepageBtn.cloneNode(true)); // remove listeners
+    document.getElementById('master-edit-homepage-btn').addEventListener('click', () => {
+      superAdminEditBusiness('admin');
+    });
+  }
+
   // Bind create account form submit
   const createForm = document.getElementById('master-create-account-form');
   if (createForm) {

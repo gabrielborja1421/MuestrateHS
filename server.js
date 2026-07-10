@@ -50,15 +50,15 @@ const defaultInfo = JSON.stringify({
 });
 
 const defaultFeatures = JSON.stringify([
-  { id: 'f1', title: 'Expositor Físico', icon: 'fa-qrcode', description: 'Expositores acrílicos elegantes con tecnología QR y NFC integrada.' },
+  { id: 'f1', title: 'Expositor Impreso 3D', icon: 'fa-qrcode', description: 'Base elegante en impresión 3D con placa de madera grabada en láser y tecnología QR.' },
   { id: 'f2', title: 'Navegación Intuitiva', icon: 'fa-location-arrow', description: 'Tus clientes acceden de inmediato a tu menú o catálogo digital.' },
   { id: 'f3', title: 'Soporte y Garantía', icon: 'fa-headset', description: 'Asistencia especializada y configuración de tus expositores.' }
 ]);
 
 const defaultProducts = JSON.stringify([
-  { id: 'plan_premium', name: 'PREMIUM', price: 1499, description: 'Expositor físico QR + NFC.Navegación.NFC.QR.Diseño e impresión.Soporte.Google Maps.Punto de venta.3 EXPOSITORES FÍSICOS', image: '/images/acrylic_expositor_mockup.png' },
-  { id: 'plan_medium', name: 'MEDIUM', price: 999, description: 'Expositor físico QR + NFC.Navegación.NFC.QR.Asesoramiento.Soporte.Google Maps.2 EXPOSITORES FÍSICOS', image: '/images/acrylic_expositor_mockup.png' },
-  { id: 'plan_basic', name: 'BASIC', price: 499, description: 'Expositor físico QR.Navegación.QR.Asesoramiento.Soporte.1 EXPOSITOR FÍSICO', image: '/images/acrylic_expositor_mockup.png' }
+  { id: 'plan_premium', name: 'PREMIUM', price: 199, description: 'Expositor impreso en 3D con grabado láser en madera y tecnología QR + NFC.Navegación.NFC.QR.Diseño e impresión.Soporte.Google Maps.Punto de venta.3 EXPOSITORES FÍSICOS', image: '/images/wood_3d_printed_expositor.png' },
+  { id: 'plan_medium', name: 'MEDIUM', price: 180, description: 'Expositor impreso en 3D con grabado láser en madera y tecnología QR + NFC.Navegación.NFC.QR.Asesoramiento.Soporte.Google Maps.2 EXPOSITORES FÍSICOS', image: '/images/wood_3d_printed_expositor.png' },
+  { id: 'plan_basic', name: 'BASIC', price: 99, description: 'Expositor impreso en 3D con grabado láser en madera y tecnología QR.Navegación.QR.Asesoramiento.Soporte.1 EXPOSITOR FÍSICO', image: '/images/wood_3d_printed_expositor.png' }
 ]);
 
 if (!checkAdmin) {
@@ -70,17 +70,22 @@ if (!checkAdmin) {
   insertAdmin.run('admin', defaultHash, defaultTheme, defaultInfo, defaultFeatures, defaultProducts);
   console.log('Seeder: Usuario "admin" maestro creado por defecto con clave "admin123" y datos de plataforma.');
 } else {
-  // If admin exists but doesn't have the new title 'HardSoft', update it to keep the DB in sync
+  // If admin exists but doesn't have the new pricing or title, update it to keep the DB in sync
   let parsedInfo = {};
+  let parsedProducts = [];
   try { parsedInfo = JSON.parse(checkAdmin.info || '{}'); } catch(e){}
-  if (!parsedInfo.title || parsedInfo.title !== 'HardSoft') {
+  try { parsedProducts = JSON.parse(checkAdmin.products || '[]'); } catch(e){}
+  
+  const needsUpgrade = !parsedInfo.title || parsedInfo.title !== 'HardSoft' || !parsedProducts[0] || parsedProducts[0].price !== 199;
+  
+  if (needsUpgrade) {
     const updateAdmin = dbInstance.prepare(`
       UPDATE businesses SET 
         theme = ?, info = ?, features = ?, products = ?
       WHERE id = 'admin'
     `);
     updateAdmin.run(defaultTheme, defaultInfo, defaultFeatures, defaultProducts);
-    console.log('Seeder: Datos de plataforma de HardSoft inyectados/actualizados en la cuenta admin existente.');
+    console.log('Seeder: Datos de plataforma de HardSoft inyectados/actualizados (Wood 3D & Precios) en la cuenta admin existente.');
   }
 }
 

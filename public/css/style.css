@@ -1984,4 +1984,114 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Super-Admin Dashboard Styles */
+#master-business-list-body tr {
+  border-bottom: 1px solid #1e293b;
+  transition: background-color var(--transition-fast);
+}
+#master-business-list-body tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+#master-business-list-body td {
+  padding: 14px 8px;
+  vertical-align: middle;
+}
+.btn-action-sm {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+.btn-action-sm.btn-danger {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+.btn-action-sm.btn-danger:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+.btn-action-sm.btn-warning {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  margin-right: 8px;
+}
+.btn-action-sm.btn-warning:hover {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+#superadmin-workspace label {
+  color: #cbd5e1 !important;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+#superadmin-workspace .input-tip {
+  color: #94a3b8 !important;
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+}
+
+/* Modal Overlay Base Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.75); /* Dark slate semi-transparent */
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999 !important; /* Make sure it's on top of everything! */
+  animation: fadeIn var(--transition-fast) ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Setup Wizard Enhancements */
+.wizard-step-node {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+}
+.wizard-step-node.active {
+  box-shadow: 0 0 12px var(--primary-color);
+}
+
+/* Dynamic Light Hero Theme Override */
+.hero-section.hero-light-theme {
+  color: #0f172a !important;
+}
+.hero-section.hero-light-theme h1 {
+  background: linear-gradient(135deg, #0f172a 30%, var(--primary-color) 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+.hero-section.hero-light-theme p {
+  color: #475569 !important;
+}
+.hero-section.hero-light-theme .btn-outline {
+  border-color: #0f172a !important;
+  color: #0f172a !important;
+}
+.hero-section.hero-light-theme .btn-outline:hover {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+.hero-section.hero-light-theme .social-icon-btn {
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
 

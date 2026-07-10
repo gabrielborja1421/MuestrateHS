@@ -120,6 +120,20 @@ async function setupPublicClientView(businessId) {
   }
 }
 
+function isColorLight(hexColor) {
+  if (!hexColor || hexColor.trim() === '') return false;
+  let hex = hexColor.replace('#', '');
+  if (hex.length === 3) {
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  }
+  if (hex.length !== 6) return false;
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  return yiq >= 170; // Brightness threshold (light background if >= 170)
+}
+
 // Render dynamic elements in targeted document context (main vs iframe)
 function renderClientPage(targetDoc = document) {
   const { theme, info, features, carouselImages, products, reviews, videos } = editorState;
@@ -198,55 +212,51 @@ function renderClientPage(targetDoc = document) {
     
     let logoTextHTML = '';
     if (theme.logoType !== 'logo' || !info.logoUrl || info.logoUrl.trim() === '') {
-      logoTextHTML = `<span id="view-logo-text">${info.title}</span>`;
+      logoTextHTML = `<span class="logo-text">${info.title}</span>`;
     }
     
-    logoContainer.innerHTML = `
-      <a href="#" class="logo logo-combined">
-        ${logoImgHTML}
-        ${logoTextHTML}
-      </a>
-    `;
+    logoContainer.innerHTML = logoImgHTML + logoTextHTML;
   }
   
   const heroLogoContainer = targetDoc.getElementById('view-hero-logo-container');
   if (heroLogoContainer) {
-    const isHeroLogoVisible = theme.visibleSections.heroLogo !== false;
-    if (isHeroLogoVisible && info.logoUrl && info.logoUrl.trim() !== '') {
-      heroLogoContainer.innerHTML = `<img src="${info.logoUrl}" class="hero-logo-img" alt="${info.title}" onerror="this.parentNode.style.display='none'">`;
-      heroLogoContainer.style.display = 'flex';
-    } else {
-      heroLogoContainer.innerHTML = '';
-      heroLogoContainer.style.display = 'none';
+    let logoImgHTML = '';
+    if (theme.logoType !== 'text' && info.logoUrl && info.logoUrl.trim() !== '') {
+      logoImgHTML = `<img src="${info.logoUrl}" class="hero-logo-img" alt="${info.title}" onerror="this.remove()">`;
     }
+    
+    heroLogoContainer.innerHTML = logoImgHTML;
+    heroLogoContainer.style.display = (theme.logoType !== 'text' && info.logoUrl && info.logoUrl.trim() !== '') ? 'block' : 'none';
   }
-
-  const heroTitle = targetDoc.getElementById('view-hero-title');
-  if (heroTitle) heroTitle.textContent = info.title;
   
-  const heroSubtitle = targetDoc.getElementById('view-hero-subtitle');
-  if (heroSubtitle) heroSubtitle.textContent = info.subtitle;
+  const headerLogoContainer = targetDoc.getElementById('header-logo-container');
+  if (headerLogoContainer) {
+    let logoImgHTML = '';
+    if (theme.logoType !== 'text' && info.logoUrl && info.logoUrl.trim() !== '') {
+      logoImgHTML = `<img src="${info.logoUrl}" class="logo-img" alt="${info.title}" onerror="this.remove()">`;
+    }
+    
+    let logoTextHTML = '';
+    if (theme.logoType !== 'logo' || !info.logoUrl || info.logoUrl.trim() === '') {
+      logoTextHTML = `<span class="logo-text">${info.title}</span>`;
+    }
+    
+    headerLogoContainer.innerHTML = logoImgHTML + logoTextHTML;
+  }
   
-  const aboutDesc = targetDoc.getElementById('view-about-desc');
-  if (aboutDesc) aboutDesc.textContent = info.description;
+  const brandNameEl = targetDoc.getElementById('view-brand-name');
+  if (brandNameEl) brandNameEl.textContent = info.title;
   
-  // Contact details
-  const emailEl = targetDoc.getElementById('view-contact-email');
-  if (emailEl) emailEl.textContent = info.email || 'No proporcionado';
+  const subtitleEl = targetDoc.getElementById('view-subtitle');
+  if (subtitleEl) subtitleEl.textContent = info.subtitle;
   
-  const phoneEl = targetDoc.getElementById('view-contact-phone');
-  if (phoneEl) phoneEl.textContent = info.phone || 'No proporcionado';
+  const heroTitleEl = targetDoc.getElementById('view-hero-title');
+  if (heroTitleEl) heroTitleEl.textContent = info.title;
   
-  const addrEl = targetDoc.getElementById('view-contact-address');
-  if (addrEl) addrEl.textContent = info.address || 'No proporcionado';
+  const heroSubtitleEl = targetDoc.getElementById('view-hero-subtitle');
+  if (heroSubtitleEl) heroSubtitleEl.textContent = info.subtitle;
   
-  const footerTitle = targetDoc.getElementById('view-footer-title');
-  if (footerTitle) footerTitle.textContent = info.title;
-  
-  const footerDesc = targetDoc.getElementById('view-footer-desc');
-  if (footerDesc) footerDesc.textContent = info.subtitle;
-  
-  const copyrightEl = targetDoc.getElementById('view-copyright-name');
+  const copyrightEl = targetDoc.getElementById('footer-copyright');
   if (copyrightEl) copyrightEl.textContent = info.title;
   
   const yearEl = targetDoc.getElementById('footer-year');
@@ -256,6 +266,16 @@ function renderClientPage(targetDoc = document) {
   const heroElement = targetDoc.getElementById('inicio');
   const heroContent = targetDoc.getElementById('view-hero-content');
   const ctaBtn = targetDoc.getElementById('view-cta-hero');
+  const overlayEl = targetDoc.getElementById('view-hero-overlay');
+  
+  if (overlayEl) {
+    if (info.heroBgType === 'image') {
+      overlayEl.style.display = 'block';
+      overlayEl.style.background = 'rgba(15, 23, 42, 0.65)';
+    } else {
+      overlayEl.style.display = 'none';
+    }
+  }
   
   if (heroContent) {
     heroContent.className = `hero-content align-${info.heroTextAlign || 'center'}`;
@@ -264,20 +284,30 @@ function renderClientPage(targetDoc = document) {
     ctaBtn.textContent = info.ctaText || 'Ver Catálogo';
   }
   if (heroElement) {
+    let isLight = false;
     if (info.heroBgType === 'gradient') {
       const gradStart = info.heroGradientStart || '#52750f';
       const gradEnd = info.heroGradientEnd || '#0f172a';
       heroElement.style.background = `linear-gradient(135deg, ${gradStart} 0%, ${gradEnd} 100%)`;
       heroElement.style.backgroundImage = '';
+      isLight = isColorLight(gradStart);
     } else if (info.heroBgType === 'image' && info.heroBgImage && info.heroBgImage.trim() !== '') {
       heroElement.style.backgroundImage = `url('${info.heroBgImage}')`;
       heroElement.style.backgroundSize = 'cover';
       heroElement.style.backgroundPosition = 'center';
       heroElement.style.backgroundColor = 'transparent';
+      isLight = false;
     } else {
       const solidColor = info.heroBgColor || '#0f172a';
       heroElement.style.background = solidColor;
       heroElement.style.backgroundImage = '';
+      isLight = isColorLight(solidColor);
+    }
+    
+    if (isLight) {
+      heroElement.classList.add('hero-light-theme');
+    } else {
+      heroElement.classList.remove('hero-light-theme');
     }
   }
   
@@ -967,81 +997,89 @@ function setupAuthForms() {
   const showRegLink = document.getElementById('show-register');
   const showLoginLink = document.getElementById('show-login');
   
-  showRegLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    loginForm.style.display = 'none';
-    regForm.style.display = 'block';
-  });
+  if (showRegLink && regForm) {
+    showRegLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginForm.style.display = 'none';
+      regForm.style.display = 'block';
+    });
+  }
   
-  showLoginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    regForm.style.display = 'none';
-    loginForm.style.display = 'block';
-  });
-  
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const businessId = document.getElementById('login-businessId').value.trim();
-    const password = document.getElementById('login-password').value;
-    
-    showLoading(true, 'Iniciando sesión...');
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ businessId, password })
-      });
-      
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.error || 'Credenciales incorrectas');
-      }
-      
-      authToken = result.token;
-      currentBusinessId = result.businessId;
-      sessionStorage.setItem('auth_token', authToken);
-      sessionStorage.setItem('business_id', currentBusinessId);
-      
-      showLoading(false);
-      showToast('Inicio de sesión exitoso', 'success');
-      loadAdminDashboard();
-    } catch (error) {
-      showLoading(false);
-      showToast(error.message, 'error');
-    }
-  });
-  
-  regForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const businessId = document.getElementById('reg-businessId').value.trim();
-    const password = document.getElementById('reg-password').value;
-    const title = document.getElementById('reg-title').value.trim();
-    const subtitle = document.getElementById('reg-subtitle').value.trim();
-    
-    showLoading(true, 'Registrando negocio...');
-    try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ businessId, password, title, subtitle })
-      });
-      
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.error || 'Error al registrar el negocio');
-      }
-      
-      showLoading(false);
-      showToast(result.message, 'success');
-      regForm.reset();
+  if (showLoginLink && regForm) {
+    showLoginLink.addEventListener('click', (e) => {
+      e.preventDefault();
       regForm.style.display = 'none';
       loginForm.style.display = 'block';
-      document.getElementById('login-businessId').value = businessId;
-    } catch (error) {
-      showLoading(false);
-      showToast(error.message, 'error');
-    }
-  });
+    });
+  }
+  
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const businessId = document.getElementById('login-businessId').value.trim();
+      const password = document.getElementById('login-password').value;
+      
+      showLoading(true, 'Iniciando sesión...');
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ businessId, password })
+        });
+        
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.error || 'Credenciales incorrectas');
+        }
+        
+        authToken = result.token;
+        currentBusinessId = result.businessId;
+        sessionStorage.setItem('auth_token', authToken);
+        sessionStorage.setItem('business_id', currentBusinessId);
+        
+        showLoading(false);
+        showToast('Inicio de sesión exitoso', 'success');
+        loadAdminDashboard();
+      } catch (error) {
+        showLoading(false);
+        showToast(error.message, 'error');
+      }
+    });
+  }
+  
+  if (regForm) {
+    regForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const businessId = document.getElementById('reg-businessId').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const title = document.getElementById('reg-title').value.trim();
+      const subtitle = document.getElementById('reg-subtitle').value.trim();
+      
+      showLoading(true, 'Registrando negocio...');
+      try {
+        const response = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ businessId, password, title, subtitle })
+        });
+        
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.error || 'Error al registrar el negocio');
+        }
+        
+        showLoading(false);
+        showToast(result.message, 'success');
+        regForm.reset();
+        regForm.style.display = 'none';
+        loginForm.style.display = 'block';
+        document.getElementById('login-businessId').value = businessId;
+      } catch (error) {
+        showLoading(false);
+        showToast(error.message, 'error');
+      }
+    });
+  }
 }
 
 // Client uploader handler: Reads local file, uploads to API, fills text URL
@@ -1113,6 +1151,15 @@ function setupFileUpload(fileInputId, textInputId, callback) {
 
 async function loadAdminDashboard() {
   document.getElementById('login-section').style.display = 'none';
+  
+  if (currentBusinessId.toLowerCase() === 'admin') {
+    document.getElementById('editor-workspace').style.display = 'none';
+    document.getElementById('superadmin-workspace').style.display = 'grid';
+    loadSuperAdminDashboard();
+    return;
+  }
+  
+  document.getElementById('superadmin-workspace').style.display = 'none';
   document.getElementById('editor-workspace').style.display = 'grid';
   
   document.getElementById('preview-url-text').textContent = `muestrate.com.mx/${currentBusinessId}`;
@@ -1165,9 +1212,6 @@ async function loadAdminDashboard() {
     // Initialize File Uploaders
     setupFileUpload('upload-logo-file', 'edit-logo-url', (url) => { editorState.info.logoUrl = url; });
     setupFileUpload('upload-hero-file', 'edit-hero-bg-image', (url) => { editorState.info.heroBgImage = url; });
-    setupFileUpload('upload-carousel-0', 'edit-carousel-img-0', (url) => { editorState.carouselImages[0] = url; });
-    setupFileUpload('upload-carousel-1', 'edit-carousel-img-1', (url) => { editorState.carouselImages[1] = url; });
-    setupFileUpload('upload-carousel-2', 'edit-carousel-img-2', (url) => { editorState.carouselImages[2] = url; });
     setupFileUpload('upload-product-file', 'edit-product-image');
     setupFileUpload('upload-video-file', 'edit-video-url');
     
@@ -1175,6 +1219,8 @@ async function loadAdminDashboard() {
     setupFeaturesCRUD();
     setupProductCRUD();
     setupVideosCRUD();
+    setupGalleryImagesCRUD();
+    setupWizard();
     
     renderEditorFeatures();
     renderEditorProducts();
@@ -1238,9 +1284,7 @@ function populateEditorInputs() {
   document.getElementById('edit-card-bg-text').value = theme.cardBgColor;
   
   document.getElementById('edit-carousel-type').value = theme.carouselType;
-  for (let i = 0; i < 3; i++) {
-    document.getElementById(`edit-carousel-img-${i}`).value = editorState.carouselImages[i] || '';
-  }
+  renderEditorGalleryImages();
   
   document.getElementById('sec-visible-features').checked = theme.visibleSections.features !== false;
   document.getElementById('sec-visible-carousel').checked = theme.visibleSections.carousel !== false;
@@ -1424,16 +1468,7 @@ function setupLiveListeners() {
       renderCarouselSection(editorState.carouselImages, editorState.theme.carouselType, iframeDoc);
     }
   });
-  
-  for (let i = 0; i < 3; i++) {
-    document.getElementById(`edit-carousel-img-${i}`).addEventListener('input', (e) => {
-      editorState.carouselImages[i] = e.target.value;
-      const iframeDoc = getPreviewDocument();
-      if (iframeDoc) {
-        renderCarouselSection(editorState.carouselImages, editorState.theme.carouselType, iframeDoc);
-      }
-    });
-  }
+
   
   const toggleCheckbox = (id, key) => {
     document.getElementById(id).addEventListener('change', (e) => {
@@ -2271,4 +2306,763 @@ function renderEditorVideos() {
     
     container.appendChild(card);
   });
+}
+
+// ==========================================================
+// CRUD GALLERY IMAGES LOGIC (ADMIN)
+// ==========================================================
+function setupGalleryImagesCRUD() {
+  const addBtn = document.getElementById('add-gallery-image-btn');
+  if (!addBtn) return;
+  
+  addBtn.addEventListener('click', () => {
+    editorState.carouselImages.push('');
+    renderEditorGalleryImages();
+    const iframeDoc = getPreviewDocument();
+    if (iframeDoc) {
+      renderCarouselSection(editorState.carouselImages, editorState.theme.carouselType, iframeDoc);
+    }
+  });
+}
+
+function renderEditorGalleryImages() {
+  const container = document.getElementById('admin-gallery-images-list');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  if (!editorState.carouselImages || editorState.carouselImages.length === 0) {
+    container.innerHTML = '<p style="text-align: center; color: #94a3b8; font-size: 0.85rem; padding: 12px 0;">No hay imágenes agregadas.</p>';
+    return;
+  }
+  
+  editorState.carouselImages.forEach((imgUrl, index) => {
+    const item = document.createElement('div');
+    item.className = 'input-list-item';
+    item.setAttribute('data-index', index);
+    
+    // Unique IDs for upload triggers
+    const uploadInputId = `upload-carousel-dynamic-${index}`;
+    const textInputId = `edit-carousel-img-dynamic-${index}`;
+    
+    item.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <span style="font-size: 0.8rem; font-weight: 600; color: #cbd5e1;">Foto ${index + 1}</span>
+        <button type="button" class="btn-delete-gallery-img" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 2px 6px;" title="Eliminar foto">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+      <div class="file-upload-wrapper">
+        <input type="text" id="${textInputId}" class="gallery-img-url-input" value="${imgUrl || ''}" placeholder="URL o sube foto">
+        <input type="file" id="${uploadInputId}" accept="image/*" class="file-input-hidden" style="display: none;">
+        <button type="button" class="btn-upload-trigger" title="Subir foto" onclick="document.getElementById('${uploadInputId}').click()">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </button>
+      </div>
+    `;
+    
+    // 1. Text input listener (URL typing)
+    const textInput = item.querySelector('.gallery-img-url-input');
+    textInput.addEventListener('input', (e) => {
+      editorState.carouselImages[index] = e.target.value;
+      const iframeDoc = getPreviewDocument();
+      if (iframeDoc) {
+        renderCarouselSection(editorState.carouselImages, editorState.theme.carouselType, iframeDoc);
+      }
+    });
+    
+    // 2. Delete button listener
+    item.querySelector('.btn-delete-gallery-img').addEventListener('click', () => {
+      editorState.carouselImages.splice(index, 1);
+      renderEditorGalleryImages();
+      const iframeDoc = getPreviewDocument();
+      if (iframeDoc) {
+        renderCarouselSection(editorState.carouselImages, editorState.theme.carouselType, iframeDoc);
+      }
+    });
+    
+    container.appendChild(item);
+    
+    // 3. Initialize file uploader for this item dynamically
+    setupFileUpload(uploadInputId, textInputId, (url) => {
+      editorState.carouselImages[index] = url;
+      const iframeDoc = getPreviewDocument();
+      if (iframeDoc) {
+        renderCarouselSection(editorState.carouselImages, editorState.theme.carouselType, iframeDoc);
+      }
+    });
+  });
+}
+
+// ==========================================================
+// MASTER ADMIN (SUPER-ADMIN) PORTAL FRONTEND
+// ==========================================================
+let masterBusinesses = [];
+
+async function loadSuperAdminDashboard() {
+  // Bind master logout button
+  const masterLogoutBtn = document.getElementById('master-logout-btn');
+  if (masterLogoutBtn) {
+    masterLogoutBtn.replaceWith(masterLogoutBtn.cloneNode(true)); // remove listeners
+    document.getElementById('master-logout-btn').addEventListener('click', () => {
+      logout();
+    });
+  }
+
+  // Bind create account form submit
+  const createForm = document.getElementById('master-create-account-form');
+  if (createForm) {
+    createForm.replaceWith(createForm.cloneNode(true)); // remove listeners
+    document.getElementById('master-create-account-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const businessId = document.getElementById('master-new-business-id').value.trim();
+      const title = document.getElementById('master-new-business-title').value.trim();
+      const subtitle = document.getElementById('master-new-business-subtitle').value.trim();
+      const password = document.getElementById('master-new-business-password').value;
+      
+      showLoading(true, 'Creando cuenta de cliente...');
+      try {
+        const response = await fetch('/api/admin/businesses', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': authToken
+          },
+          body: JSON.stringify({ businessId, password, title, subtitle })
+        });
+        
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.error || 'Error al crear la cuenta.');
+        }
+        
+        showLoading(false);
+        showToast(result.message, 'success');
+        document.getElementById('master-create-account-form').reset();
+        await fetchMasterBusinesses();
+      } catch (error) {
+        showLoading(false);
+        showToast(error.message, 'error');
+      }
+    });
+  }
+
+  // Bind password reset form submit
+  const resetForm = document.getElementById('master-reset-password-form');
+  if (resetForm) {
+    resetForm.replaceWith(resetForm.cloneNode(true)); // remove listeners
+    document.getElementById('master-reset-password-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const businessId = document.getElementById('reset-modal-business-id').textContent;
+      const newPassword = document.getElementById('master-reset-new-password').value;
+      
+      showLoading(true, 'Actualizando contraseña...');
+      try {
+        const response = await fetch(`/api/admin/businesses/${businessId}/reset-password`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': authToken
+          },
+          body: JSON.stringify({ newPassword })
+        });
+        
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.error || 'Error al actualizar contraseña.');
+        }
+        
+        showLoading(false);
+        showToast(result.message, 'success');
+        closeResetPasswordModal();
+      } catch (error) {
+        showLoading(false);
+        showToast(error.message, 'error');
+      }
+    });
+  }
+
+  // Bind close modal button
+  const closeModalBtn = document.getElementById('close-reset-modal-btn');
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', closeResetPasswordModal);
+  }
+
+  // Fetch accounts list
+  await fetchMasterBusinesses();
+}
+
+async function fetchMasterBusinesses() {
+  try {
+    const response = await fetch('/api/admin/businesses', {
+      headers: {
+        'Authorization': authToken
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error('No se pudo cargar la lista de cuentas.');
+    }
+    
+    masterBusinesses = await response.json();
+    renderMasterBusinessList();
+  } catch (error) {
+    showToast(error.message, 'error');
+  }
+}
+
+function renderMasterBusinessList() {
+  const tbody = document.getElementById('master-business-list-body');
+  if (!tbody) return;
+  
+  tbody.innerHTML = '';
+  
+  if (masterBusinesses.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align: center; color: #94a3b8; padding: 24px 8px;">
+          No hay cuentas de cliente registradas todavía. ¡Crea la primera usando el formulario lateral!
+        </td>
+      </tr>
+    `;
+    return;
+  }
+  
+  masterBusinesses.forEach(business => {
+    const tr = document.createElement('tr');
+    
+    tr.innerHTML = `
+      <td style="font-weight: 600; color: #ffffff;">
+        <a href="/${business.businessId}" target="_blank" style="color: var(--primary-color); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+          ${business.businessId} <i class="fa-solid fa-square-arrow-up-right" style="font-size: 0.75rem;"></i>
+        </a>
+      </td>
+      <td style="color: #cbd5e1;">
+        <div style="font-weight: 500;">${business.title}</div>
+        <div style="font-size: 0.75rem; color: #64748b;">${business.subtitle || ''}</div>
+      </td>
+      <td style="text-align: center; color: #94a3b8; font-size: 0.85rem;">
+        <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 9999px;">${business.productsCount}</span>
+      </td>
+      <td style="text-align: center; color: #94a3b8; font-size: 0.85rem;">
+        <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 9999px;">${business.reviewsCount}</span>
+      </td>
+      <td style="text-align: right; white-space: nowrap;">
+        <button class="btn-action-sm btn-warning btn-reset-pass" data-id="${business.businessId}">
+          <i class="fa-solid fa-key"></i> Llave
+        </button>
+        <button class="btn-action-sm btn-danger btn-delete-account" data-id="${business.businessId}">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </td>
+    `;
+    
+    // Bind reset password
+    tr.querySelector('.btn-reset-pass').addEventListener('click', () => {
+      openResetPasswordModal(business.businessId);
+    });
+    
+    // Bind delete account
+    tr.querySelector('.btn-delete-account').addEventListener('click', async () => {
+      if (confirm(`¿Estás completamente seguro de que deseas eliminar permanentemente la cuenta "${business.businessId}" y todos sus productos, fotos y opiniones? Esta acción no se puede deshacer.`)) {
+        showLoading(true, 'Eliminando cuenta...');
+        try {
+          const response = await fetch(`/api/admin/businesses/${business.businessId}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': authToken
+            }
+          });
+          
+          const result = await response.json();
+          if (!response.ok) {
+            throw new Error(result.error || 'Error al eliminar cuenta.');
+          }
+          
+          showLoading(false);
+          showToast(result.message, 'success');
+          await fetchMasterBusinesses();
+        } catch (error) {
+          showLoading(false);
+          showToast(error.message, 'error');
+        }
+      }
+    });
+    
+    tbody.appendChild(tr);
+  });
+}
+
+function openResetPasswordModal(businessId) {
+  document.getElementById('reset-modal-business-id').textContent = businessId;
+  document.getElementById('master-reset-new-password').value = '';
+  document.getElementById('master-reset-password-modal').style.display = 'flex';
+}
+
+function closeResetPasswordModal() {
+  document.getElementById('master-reset-password-modal').style.display = 'none';
+}
+
+// ==========================================================
+// GUIDED SETUP WIZARD (ADMIN)
+// ==========================================================
+let currentWizardStep = 1;
+
+function fastUpdateWizardPreviewStyle(variable, value) {
+  const previewDoc = getPreviewDocument();
+  if (previewDoc) {
+    previewDoc.documentElement.style.setProperty(variable, value);
+  }
+}
+
+function fastUpdateWizardHeroBg() {
+  const previewDoc = getPreviewDocument();
+  if (!previewDoc) return;
+  const heroEl = previewDoc.getElementById('inicio');
+  const overlayEl = previewDoc.getElementById('view-hero-overlay');
+  if (!heroEl) return;
+
+  const bgType = editorState.info.heroBgType || 'color';
+  if (overlayEl) {
+    if (bgType === 'image') {
+      overlayEl.style.display = 'block';
+      overlayEl.style.background = 'rgba(15, 23, 42, 0.65)';
+    } else {
+      overlayEl.style.display = 'none';
+    }
+  }
+
+  let isLight = false;
+  if (bgType === 'gradient') {
+    const gradStart = editorState.info.heroGradientStart || '#52750f';
+    const gradEnd = editorState.info.heroGradientEnd || '#0f172a';
+    heroEl.style.background = `linear-gradient(135deg, ${gradStart} 0%, ${gradEnd} 100%)`;
+    heroEl.style.backgroundImage = '';
+    isLight = isColorLight(gradStart);
+  } else if (bgType === 'image' && editorState.info.heroBgImage && editorState.info.heroBgImage.trim() !== '') {
+    heroEl.style.backgroundImage = `url('${editorState.info.heroBgImage}')`;
+    heroEl.style.backgroundSize = 'cover';
+    heroEl.style.backgroundPosition = 'center';
+    heroEl.style.backgroundColor = 'transparent';
+    isLight = false;
+  } else {
+    const solidColor = editorState.info.heroBgColor || '#0f172a';
+    heroEl.style.background = solidColor;
+    heroEl.style.backgroundImage = '';
+    isLight = isColorLight(solidColor);
+  }
+
+  if (isLight) {
+    heroEl.classList.add('hero-light-theme');
+  } else {
+    heroEl.classList.remove('hero-light-theme');
+  }
+}
+
+function updateWizardComponentPreview() {
+  const fontSelect = document.getElementById('wizard-font');
+  const pColorInput = document.getElementById('wizard-color-primary');
+  const sColorInput = document.getElementById('wizard-color-secondary');
+  
+  if (!fontSelect || !pColorInput || !sColorInput) return;
+  
+  const font = fontSelect.value;
+  const pColor = pColorInput.value;
+  const sColor = sColorInput.value;
+  
+  const title = document.getElementById('wizard-preview-card-title');
+  const text = document.getElementById('wizard-preview-card-text');
+  const badge = document.getElementById('wizard-preview-card-badge');
+  const btn = document.getElementById('wizard-preview-card-button');
+  
+  if (title) title.style.fontFamily = `'${font}', sans-serif`;
+  if (text) text.style.fontFamily = `'${font}', sans-serif`;
+  if (btn) {
+    btn.style.fontFamily = `'${font}', sans-serif`;
+    btn.style.backgroundColor = pColor;
+  }
+  if (badge) {
+    badge.style.backgroundColor = sColor;
+    const isLight = isColorLight(sColor);
+    badge.style.color = isLight ? '#0f172a' : '#ffffff';
+  }
+}
+
+function setupWizard() {
+  const triggerBtn = document.getElementById('wizard-trigger-btn');
+  const overlay = document.getElementById('wizard-overlay');
+  const closeBtn = document.getElementById('close-wizard-btn');
+  const prevBtn = document.getElementById('wizard-prev-btn');
+  const nextBtn = document.getElementById('wizard-next-btn');
+
+  if (!triggerBtn || !overlay) return;
+
+  // Open Wizard
+  triggerBtn.addEventListener('click', () => {
+    currentWizardStep = 1;
+    
+    // Populate Wizard fields with current editorState values
+    document.getElementById('wizard-title').value = editorState.info.title || '';
+    document.getElementById('wizard-subtitle').value = editorState.info.subtitle || '';
+    document.getElementById('wizard-logo').value = editorState.info.logoUrl || '';
+    
+    // Font selection & preview
+    const fontSelect = document.getElementById('wizard-font');
+    fontSelect.value = editorState.theme.fontFamily || 'Plus Jakarta Sans';
+    
+    const pColor = editorState.theme.primaryColor || '#52750f';
+    const sColor = editorState.theme.secondaryColor || '#a3e635';
+    document.getElementById('wizard-color-primary').value = pColor;
+    document.getElementById('wizard-color-primary-text').value = pColor;
+    document.getElementById('wizard-color-secondary').value = sColor;
+    document.getElementById('wizard-color-secondary-text').value = sColor;
+    
+    // Hero Section
+    const bgType = editorState.info.heroBgType || 'color';
+    document.getElementById('wizard-hero-bg-type').value = bgType;
+    updateWizardHeroBgFields(bgType);
+    document.getElementById('wizard-cta-text').value = editorState.info.ctaText || 'Ver Catálogo';
+    
+    // Social Links
+    document.getElementById('wizard-phone').value = editorState.info.phone || '';
+    document.getElementById('wizard-whatsapp').value = editorState.info.socialWhatsapp || '';
+    document.getElementById('wizard-facebook').value = editorState.info.socialFacebook || '';
+    document.getElementById('wizard-instagram').value = editorState.info.socialInstagram || '';
+    document.getElementById('wizard-twitter').value = editorState.info.socialTwitter || '';
+    
+    // Set active step view and local component preview
+    updateWizardStepView(1);
+    updateWizardComponentPreview();
+    overlay.style.display = 'flex';
+  });
+
+  // Font change listener for live preview in wizard
+  const fontSelect = document.getElementById('wizard-font');
+  if (fontSelect) {
+    fontSelect.addEventListener('change', (e) => {
+      editorState.theme.fontFamily = e.target.value;
+      updateWizardComponentPreview();
+      refreshPreviewAndInputs();
+    });
+  }
+
+  // Hero BG Type change listener
+  const heroBgTypeSelect = document.getElementById('wizard-hero-bg-type');
+  if (heroBgTypeSelect) {
+    heroBgTypeSelect.addEventListener('change', (e) => {
+      editorState.info.heroBgType = e.target.value;
+      updateWizardHeroBgFields(e.target.value);
+      refreshPreviewAndInputs();
+    });
+  }
+
+  // Close Wizard
+  closeBtn.addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+
+  // Previous Step
+  prevBtn.addEventListener('click', () => {
+    saveWizardStepData(currentWizardStep);
+    if (currentWizardStep > 1) {
+      currentWizardStep--;
+      updateWizardStepView(currentWizardStep);
+    }
+  });
+
+  // Next Step / Finish
+  nextBtn.addEventListener('click', () => {
+    saveWizardStepData(currentWizardStep);
+    if (currentWizardStep < 4) {
+      currentWizardStep++;
+      updateWizardStepView(currentWizardStep);
+    } else {
+      overlay.style.display = 'none';
+      showToast('¡Asistente completado! No olvides presionar "Guardar Cambios" para salvar tu progreso.', 'success');
+    }
+  });
+
+  // Double-sync wizard color pickers (Step 2) - OPTIMIZED FOR 60FPS
+  const bindWizardColor = (pickerId, textId, stateKey, cssVar) => {
+    const picker = document.getElementById(pickerId);
+    const text = document.getElementById(textId);
+    if (!picker || !text) return;
+
+    picker.addEventListener('input', (e) => {
+      const val = e.target.value;
+      text.value = val;
+      editorState.theme[stateKey] = val;
+      
+      // Fast, lightweight style injection
+      fastUpdateWizardPreviewStyle(cssVar, val);
+      if (cssVar === '--primary-color') {
+        fastUpdateWizardPreviewStyle('--primary-hover', adjustColorBrightness(val, -15));
+      }
+      updateWizardComponentPreview(); // Refresh modal card colors
+    });
+
+    picker.addEventListener('change', () => {
+      refreshPreviewAndInputs(); // Complete redraw only when user releases mouse
+    });
+
+    text.addEventListener('input', (e) => {
+      const val = e.target.value;
+      if (/^#[0-9A-F]{6}$/i.test(val)) {
+        picker.value = val;
+        editorState.theme[stateKey] = val;
+        fastUpdateWizardPreviewStyle(cssVar, val);
+        if (cssVar === '--primary-color') {
+          fastUpdateWizardPreviewStyle('--primary-hover', adjustColorBrightness(val, -15));
+        }
+        updateWizardComponentPreview();
+        refreshPreviewAndInputs();
+      }
+    });
+  };
+
+  bindWizardColor('wizard-color-primary', 'wizard-color-primary-text', 'primaryColor', '--primary-color');
+  bindWizardColor('wizard-color-secondary', 'wizard-color-secondary-text', 'secondaryColor', '--secondary-color');
+
+  // Set file uploader inside Wizard (Step 1)
+  setupFileUpload('wizard-upload-logo', 'wizard-logo', (url) => {
+    editorState.info.logoUrl = url;
+    document.getElementById('wizard-logo').value = url;
+    refreshPreviewAndInputs();
+  });
+}
+
+function updateWizardHeroBgFields(bgType) {
+  const container = document.getElementById('wizard-hero-bg-fields');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  if (bgType === 'color') {
+    container.innerHTML = `
+      <div class="form-group" style="margin-top: 12px;">
+        <label style="color: #cbd5e1 !important;">Color de Fondo de Portada</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="color" id="wizard-hero-bg-color" style="width: 42px; height: 42px; padding: 0; border: none; border-radius: 6px; cursor: pointer; background: transparent;">
+          <input type="text" id="wizard-hero-bg-color-text" style="flex: 1; background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; font-family: monospace;">
+        </div>
+      </div>
+    `;
+    
+    const picker = document.getElementById('wizard-hero-bg-color');
+    const text = document.getElementById('wizard-hero-bg-color-text');
+    const val = editorState.info.heroBgColor || '#0f172a';
+    picker.value = val;
+    text.value = val;
+    
+    picker.addEventListener('input', (e) => {
+      text.value = e.target.value;
+      editorState.info.heroBgColor = e.target.value;
+      fastUpdateWizardHeroBg(); // Optimized update
+    });
+    
+    picker.addEventListener('change', () => {
+      refreshPreviewAndInputs();
+    });
+
+    text.addEventListener('input', (e) => {
+      const v = e.target.value;
+      if (/^#[0-9A-F]{6}$/i.test(v)) {
+        picker.value = v;
+        editorState.info.heroBgColor = v;
+        fastUpdateWizardHeroBg();
+        refreshPreviewAndInputs();
+      }
+    });
+    
+  } else if (bgType === 'gradient') {
+    container.innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px;">
+        <div class="form-group">
+          <label style="color: #cbd5e1 !important;">Color Inicio (Gradiente)</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="color" id="wizard-hero-grad-start" style="width: 42px; height: 42px; padding: 0; border: none; border-radius: 6px; cursor: pointer; background: transparent;">
+            <input type="text" id="wizard-hero-grad-start-text" style="flex: 1; background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; font-family: monospace;">
+          </div>
+        </div>
+        <div class="form-group">
+          <label style="color: #cbd5e1 !important;">Color Fin (Gradiente)</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="color" id="wizard-hero-grad-end" style="width: 42px; height: 42px; padding: 0; border: none; border-radius: 6px; cursor: pointer; background: transparent;">
+            <input type="text" id="wizard-hero-grad-end-text" style="flex: 1; background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; font-family: monospace;">
+          </div>
+        </div>
+      </div>
+    `;
+    
+    const pStart = document.getElementById('wizard-hero-grad-start');
+    const tStart = document.getElementById('wizard-hero-grad-start-text');
+    const valStart = editorState.info.heroGradientStart || '#52750f';
+    pStart.value = valStart;
+    tStart.value = valStart;
+    
+    const pEnd = document.getElementById('wizard-hero-grad-end');
+    const tEnd = document.getElementById('wizard-hero-grad-end-text');
+    const valEnd = editorState.info.heroGradientEnd || '#0f172a';
+    pEnd.value = valEnd;
+    tEnd.value = valEnd;
+    
+    pStart.addEventListener('input', (e) => {
+      tStart.value = e.target.value;
+      editorState.info.heroGradientStart = e.target.value;
+      fastUpdateWizardHeroBg();
+    });
+    pStart.addEventListener('change', () => {
+      refreshPreviewAndInputs();
+    });
+
+    tStart.addEventListener('input', (e) => {
+      const v = e.target.value;
+      if (/^#[0-9A-F]{6}$/i.test(v)) {
+        pStart.value = v;
+        editorState.info.heroGradientStart = v;
+        fastUpdateWizardHeroBg();
+        refreshPreviewAndInputs();
+      }
+    });
+    
+    pEnd.addEventListener('input', (e) => {
+      tEnd.value = e.target.value;
+      editorState.info.heroGradientEnd = e.target.value;
+      fastUpdateWizardHeroBg();
+    });
+    pEnd.addEventListener('change', () => {
+      refreshPreviewAndInputs();
+    });
+
+    tEnd.addEventListener('input', (e) => {
+      const v = e.target.value;
+      if (/^#[0-9A-F]{6}$/i.test(v)) {
+        pEnd.value = v;
+        editorState.info.heroGradientEnd = v;
+        fastUpdateWizardHeroBg();
+        refreshPreviewAndInputs();
+      }
+    });
+    
+  } else if (bgType === 'image') {
+    container.innerHTML = `
+      <div class="form-group" style="margin-top: 12px;">
+        <label style="color: #cbd5e1 !important;">Imagen de Fondo (URL o Sube foto)</label>
+        <div class="file-upload-wrapper">
+          <input type="text" id="wizard-hero-bg-image" placeholder="Pega URL o sube archivo" style="width: 100%; background: #0f172a; border: 1px solid #334155; color: white; padding: 10px; border-radius: 6px;">
+          <input type="file" id="wizard-upload-hero" accept="image/*" style="display: none;">
+          <button type="button" class="btn-upload-trigger" onclick="document.getElementById('wizard-upload-hero').click()">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </button>
+        </div>
+      </div>
+    `;
+    
+    const textImg = document.getElementById('wizard-hero-bg-image');
+    textImg.value = editorState.info.heroBgImage || '';
+    
+    textImg.addEventListener('input', (e) => {
+      editorState.info.heroBgImage = e.target.value;
+      fastUpdateWizardHeroBg();
+    });
+    textImg.addEventListener('change', () => {
+      refreshPreviewAndInputs();
+    });
+    
+    setupFileUpload('wizard-upload-hero', 'wizard-hero-bg-image', (url) => {
+      editorState.info.heroBgImage = url;
+      document.getElementById('wizard-hero-bg-image').value = url;
+      refreshPreviewAndInputs();
+    });
+  }
+}
+
+function refreshPreviewAndInputs() {
+  const iframeDoc = getPreviewDocument();
+  if (iframeDoc) renderClientPage(iframeDoc);
+  populateEditorInputs();
+}
+
+function updateWizardStepView(step) {
+  // Show active content, hide others
+  const contents = document.querySelectorAll('.wizard-step-content');
+  contents.forEach(content => {
+    if (parseInt(content.getAttribute('data-step')) === step) {
+      content.style.display = 'block';
+    } else {
+      content.style.display = 'none';
+    }
+  });
+
+  // Progress Bar width
+  const progressLine = document.getElementById('wizard-progress-line');
+  if (progressLine) {
+    progressLine.style.width = `${(step - 1) * 33.33}%`;
+  }
+
+  // Active step node indicators
+  const nodes = document.querySelectorAll('.wizard-step-node');
+  nodes.forEach(node => {
+    const nodeStep = parseInt(node.getAttribute('data-step'));
+    if (nodeStep <= step) {
+      node.style.background = 'var(--primary-color)';
+      node.style.color = 'white';
+    } else {
+      node.style.background = '#334155';
+      node.style.color = '#94a3b8';
+    }
+  });
+
+  // Nav buttons
+  const prevBtn = document.getElementById('wizard-prev-btn');
+  const nextBtn = document.getElementById('wizard-next-btn');
+  const indicator = document.getElementById('wizard-step-indicator');
+
+  if (prevBtn) prevBtn.style.display = step === 1 ? 'none' : 'inline-block';
+  if (indicator) indicator.textContent = `Paso ${step} de 4`;
+  
+  if (nextBtn) {
+    if (step === 4) {
+      nextBtn.innerHTML = 'Finalizar <i class="fa-solid fa-circle-check"></i>';
+    } else {
+      nextBtn.innerHTML = 'Siguiente <i class="fa-solid fa-arrow-right"></i>';
+    }
+  }
+}
+
+function saveWizardStepData(step) {
+  if (step === 1) {
+    editorState.info.title = document.getElementById('wizard-title').value.trim();
+    editorState.info.subtitle = document.getElementById('wizard-subtitle').value.trim();
+    editorState.info.logoUrl = document.getElementById('wizard-logo').value.trim();
+  } else if (step === 2) {
+    editorState.theme.fontFamily = document.getElementById('wizard-font').value;
+    editorState.theme.primaryColor = document.getElementById('wizard-color-primary').value;
+    editorState.theme.secondaryColor = document.getElementById('wizard-color-secondary').value;
+  } else if (step === 3) {
+    editorState.info.heroBgType = document.getElementById('wizard-hero-bg-type').value;
+    editorState.info.ctaText = document.getElementById('wizard-cta-text').value.trim();
+    
+    // Save dynamic bg fields
+    if (editorState.info.heroBgType === 'color') {
+      const el = document.getElementById('wizard-hero-bg-color');
+      if (el) editorState.info.heroBgColor = el.value;
+    } else if (editorState.info.heroBgType === 'gradient') {
+      const elS = document.getElementById('wizard-hero-grad-start');
+      const elE = document.getElementById('wizard-hero-grad-end');
+      if (elS) editorState.info.heroGradientStart = elS.value;
+      if (elE) editorState.info.heroGradientEnd = elE.value;
+    } else if (editorState.info.heroBgType === 'image') {
+      const el = document.getElementById('wizard-hero-bg-image');
+      if (el) editorState.info.heroBgImage = el.value.trim();
+    }
+  } else if (step === 4) {
+    editorState.info.phone = document.getElementById('wizard-phone').value.trim();
+    editorState.info.socialWhatsapp = document.getElementById('wizard-whatsapp').value.trim();
+    editorState.info.socialFacebook = document.getElementById('wizard-facebook').value.trim();
+    editorState.info.socialInstagram = document.getElementById('wizard-instagram').value.trim();
+    editorState.info.socialTwitter = document.getElementById('wizard-twitter').value.trim();
+  }
+
+  refreshPreviewAndInputs();
 }

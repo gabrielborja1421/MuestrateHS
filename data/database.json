@@ -1,4 +1,8 @@
 {
+  "admin": {
+    "password": "$2a$10$fd9nKq819aFMwzjYuBNpI.pBEYFwFUIKEoZhd8o14Fu9A6VPXeYmG",
+    "isSuperAdmin": true
+  },
   "HardSoft": {
     "password": "$2a$10$oS5hQQeKPt1C.y.pXE2lweDBovIbKb0XAMHt1gFwZsfX3GocB.O82",
     "theme": {
@@ -11,7 +15,7 @@
       "cardBgColor": "#ffd6d6",
       "fontFamily": "Plus Jakarta Sans",
       "buttonStyle": "rounded",
-      "carouselType": "grid",
+      "carouselType": "slide",
       "pageLayout": "classic",
       "logoType": "logo",
       "visibleSections": {
@@ -42,10 +46,10 @@
       "heroGradientStart": "#52750f",
       "heroGradientEnd": "#0f172a",
       "heroTextAlign": "center",
-      "ctaText": "productos",
+      "ctaText": "Ver Catálogo",
       "socialFacebook": "https://www.facebook.com/marketplace/?ref=app_tab&locale=es_LA",
       "socialInstagram": "https://www.facebook.com/marketplace/?ref=app_tab&locale=es_LA",
-      "socialWhatsapp": "9616732990",
+      "socialWhatsapp": "+529616732990",
       "socialTwitter": ""
     },
     "features": [
@@ -71,7 +75,8 @@
     "carouselImages": [
       "/images/carrusel1.jpg",
       "/images/carrusel2.jpg",
-      "/images/carrusel3.jpg"
+      "/images/carrusel3.jpg",
+      "/uploads/upload_1783566082038_ywmv.png"
     ],
     "products": [
       {
@@ -127,5 +132,76 @@
         "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
       }
     ]
+  },
+  "KeDulce": {
+    "password": "$2a$10$ASnRgY.kD/G0c1zxOwaKb.hkd1jE/XACbU03RRqeDyEsgP5DEjjKu",
+    "theme": {
+      "primaryColor": "#52750f",
+      "secondaryColor": "#a3e635",
+      "backgroundColor": "#f8fafc",
+      "textColor": "#0f172a",
+      "navBgColor": "#ffffff",
+      "footerBgColor": "#0f172a",
+      "cardBgColor": "#ffffff",
+      "fontFamily": "Plus Jakarta Sans",
+      "buttonStyle": "rounded",
+      "carouselType": "slide",
+      "logoType": "both",
+      "logoSize": "medium",
+      "heroLogoSize": "medium",
+      "cardSize": "medium",
+      "fontSize": "medium",
+      "carouselHeight": "aspect",
+      "visibleSections": {
+        "features": true,
+        "carousel": true,
+        "products": true,
+        "reviews": true,
+        "heroLogo": true,
+        "videos": true
+      }
+    },
+    "info": {
+      "title": "Kedulce",
+      "subtitle": "Reposteria",
+      "logoUrl": "",
+      "description": "Bienvenidos a nuestra página comercial oficial. Ofrecemos los mejores servicios y productos adaptados a tus necesidades.",
+      "phone": "",
+      "whatsapp": "",
+      "facebook": "",
+      "instagram": "",
+      "twitter": "",
+      "address": "",
+      "mapEmbedUrl": "",
+      "email": "",
+      "heroBgType": "color",
+      "heroBgImage": "",
+      "heroBgColor": "#0f172a",
+      "heroGradientStart": "#52750f",
+      "heroGradientEnd": "#0f172a",
+      "heroTextAlign": "center",
+      "ctaText": "Ver Catálogo"
+    },
+    "features": [
+      {
+        "id": "f1",
+        "title": "Atención 100% Personalizada",
+        "description": "Nos adaptamos a las necesidades únicas de cada uno de nuestros clientes."
+      },
+      {
+        "id": "f2",
+        "title": "Calidad Garantizada",
+        "description": "Trabajamos bajo los más altos estándares utilizando materiales premium."
+      },
+      {
+        "id": "f3",
+        "title": "Soporte y Respuestas Rápidas",
+        "description": "Estamos listos para atender tus dudas al instante por WhatsApp o correo."
+      }
+    ],
+    "carouselImages": [],
+    "products": [],
+    "videos": [],
+    "reviews": []
   }
 }

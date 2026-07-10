@@ -327,6 +327,172 @@ app.post('/api/upload', (req, res) => {
   }
 });
 
+// ==========================================================
+// --- SUPER-ADMIN (MASTER) API ENDPOINTS ---
+// ==========================================================
+
+function authenticateSuperAdmin(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Acceso no autorizado. Token faltante.' });
+  }
+  const sessionBusinessId = activeSessions.get(authHeader);
+  if (!sessionBusinessId || sessionBusinessId.toLowerCase() !== 'admin') {
+    return res.status(403).json({ error: 'Acceso denegado: Se requiere rol de super-administrador.' });
+  }
+  req.businessId = sessionBusinessId;
+  next();
+}
+
+// 1. List all businesses
+app.get('/api/admin/businesses', authenticateSuperAdmin, (req, res) => {
+  const db = readDatabase();
+  const list = Object.keys(db)
+    .filter(k => k.toLowerCase() !== 'admin')
+    .map(key => {
+      return {
+        businessId: key,
+        title: db[key].info ? db[key].info.title : key,
+        subtitle: db[key].info ? db[key].info.subtitle : '',
+        productsCount: db[key].products ? db[key].products.length : 0,
+        featuresCount: db[key].features ? db[key].features.length : 0,
+        reviewsCount: db[key].reviews ? db[key].reviews.length : 0
+      };
+    });
+  res.json(list);
+});
+
+// 2. Create new business account
+app.post('/api/admin/businesses', authenticateSuperAdmin, (req, res) => {
+  const { businessId, password, title, subtitle } = req.body;
+  if (!businessId || !password || !title) {
+    return res.status(400).json({ error: 'ID de negocio, contraseña y título son obligatorios.' });
+  }
+  
+  if (!/^[a-zA-Z0-9_-]+$/.test(businessId)) {
+    return res.status(400).json({ error: 'El ID del negocio solo puede contener letras, números, guiones y guiones bajos (sin espacios).' });
+  }
+  
+  if (['admin', 'api', 'images', 'css', 'js'].includes(businessId.toLowerCase())) {
+    return res.status(400).json({ error: 'El ID del negocio no puede usar nombres reservados por el sistema.' });
+  }
+  
+  const db = readDatabase();
+  const exists = Object.keys(db).some(k => k.toLowerCase() === businessId.toLowerCase());
+  if (exists) {
+    return res.status(400).json({ error: 'El ID del negocio ya está registrado.' });
+  }
+  
+  const hashedPassword = bcrypt.hashSync(password, 10);
+  
+  db[businessId] = {
+    password: hashedPassword,
+    theme: {
+      primaryColor: '#52750f',
+      secondaryColor: '#a3e635',
+      backgroundColor: '#f8fafc',
+      textColor: '#0f172a',
+      navBgColor: '#ffffff',
+      footerBgColor: '#0f172a',
+      cardBgColor: '#ffffff',
+      fontFamily: 'Plus Jakarta Sans',
+      buttonStyle: 'rounded',
+      carouselType: 'slide',
+      logoType: 'both',
+      logoSize: 'medium',
+      heroLogoSize: 'medium',
+      cardSize: 'medium',
+      fontSize: 'medium',
+      carouselHeight: 'aspect',
+      visibleSections: { features: true, carousel: true, products: true, reviews: true, heroLogo: true, videos: true }
+    },
+    info: {
+      title: title,
+      subtitle: subtitle || 'Bienvenidos a nuestro negocio',
+      logoUrl: '',
+      description: 'Bienvenidos a nuestra página comercial oficial. Ofrecemos los mejores servicios y productos adaptados a tus necesidades.',
+      phone: '',
+      whatsapp: '',
+      facebook: '',
+      instagram: '',
+      twitter: '',
+      address: '',
+      mapEmbedUrl: '',
+      email: '',
+      heroBgType: 'color',
+      heroBgImage: '',
+      heroBgColor: '#0f172a',
+      heroGradientStart: '#52750f',
+      heroGradientEnd: '#0f172a',
+      heroTextAlign: 'center',
+      ctaText: 'Ver Catálogo'
+    },
+    features: [
+      { id: 'f1', title: 'Atención 100% Personalizada', description: 'Nos adaptamos a las necesidades únicas de cada uno de nuestros clientes.' },
+      { id: 'f2', title: 'Calidad Garantizada', description: 'Trabajamos bajo los más altos estándares utilizando materiales premium.' },
+      { id: 'f3', title: 'Soporte y Respuestas Rápidas', description: 'Estamos listos para atender tus dudas al instante por WhatsApp o correo.' }
+    ],
+    carouselImages: [],
+    products: [],
+    videos: [],
+    reviews: []
+  };
+  
+  if (writeDatabase(db)) {
+    res.status(201).json({ message: 'Cuenta de cliente creada correctamente.' });
+  } else {
+    res.status(500).json({ error: 'Error al escribir en la base de datos.' });
+  }
+});
+
+// 3. Reset client password
+app.post('/api/admin/businesses/:businessId/reset-password', authenticateSuperAdmin, (req, res) => {
+  const { businessId } = req.params;
+  const { newPassword } = req.body;
+  
+  if (!newPassword || newPassword.trim() === '') {
+    return res.status(400).json({ error: 'La nueva contraseña no puede estar vacía.' });
+  }
+  
+  const db = readDatabase();
+  const key = Object.keys(db).find(k => k.toLowerCase() === businessId.toLowerCase());
+  
+  if (!key) {
+    return res.status(404).json({ error: 'El negocio no existe.' });
+  }
+  
+  db[key].password = bcrypt.hashSync(newPassword, 10);
+  
+  if (writeDatabase(db)) {
+    res.json({ message: 'Contraseña actualizada correctamente.' });
+  } else {
+    res.status(500).json({ error: 'Error al escribir en la base de datos.' });
+  }
+});
+
+// 4. Delete client business account
+app.delete('/api/admin/businesses/:businessId', authenticateSuperAdmin, (req, res) => {
+  const { businessId } = req.params;
+  if (businessId.toLowerCase() === 'admin') {
+    return res.status(400).json({ error: 'No se puede eliminar la cuenta master de administrador.' });
+  }
+  
+  const db = readDatabase();
+  const key = Object.keys(db).find(k => k.toLowerCase() === businessId.toLowerCase());
+  
+  if (!key) {
+    return res.status(404).json({ error: 'El negocio no existe.' });
+  }
+  
+  delete db[key];
+  
+  if (writeDatabase(db)) {
+    res.json({ message: 'Cuenta de cliente eliminada correctamente.' });
+  } else {
+    res.status(500).json({ error: 'Error al escribir en la base de datos.' });
+  }
+});
+
 
 // --- STATIC & SUB-PATH ROUTING ---
 

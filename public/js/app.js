@@ -1158,13 +1158,17 @@ function setupFileUpload(fileInputId, textInputId, callback) {
 async function loadAdminDashboard() {
   document.getElementById('login-section').style.display = 'none';
   
-  if (currentBusinessId.toLowerCase() === 'admin') {
+  if (currentBusinessId.toLowerCase() === 'admin' && !isSuperAdminEditing) {
     document.getElementById('editor-workspace').style.display = 'none';
     document.getElementById('superadmin-workspace').style.display = 'grid';
     loadSuperAdminDashboard();
     return;
   }
   
+  await setupAdminEditorWorkspace();
+}
+
+async function setupAdminEditorWorkspace() {
   document.getElementById('superadmin-workspace').style.display = 'none';
   document.getElementById('editor-workspace').style.display = 'grid';
   
@@ -1187,6 +1191,8 @@ async function loadAdminDashboard() {
     
     // Default fallbacks
     if (!editorState.features) editorState.features = [];
+    if (!editorState.theme) editorState.theme = {};
+    if (!editorState.info) editorState.info = {};
     if (!editorState.theme.navBgColor) editorState.theme.navBgColor = '#ffffff';
     if (!editorState.theme.footerBgColor) editorState.theme.footerBgColor = '#0f172a';
     if (!editorState.theme.cardBgColor) editorState.theme.cardBgColor = '#ffffff';

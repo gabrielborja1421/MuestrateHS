@@ -256,7 +256,7 @@ function renderClientPage(targetDoc = document) {
   const heroSubtitleEl = targetDoc.getElementById('view-hero-subtitle');
   if (heroSubtitleEl) heroSubtitleEl.textContent = info.subtitle;
   
-  const copyrightEl = targetDoc.getElementById('footer-copyright');
+  const copyrightEl = targetDoc.getElementById('view-copyright-name');
   if (copyrightEl) copyrightEl.textContent = info.title;
   
   const footerTitleEl = targetDoc.getElementById('view-footer-title');

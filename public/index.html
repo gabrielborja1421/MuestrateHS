@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Muestrate HS | Crea tu Tarjeta de Presentación y Landing Page</title>
+  <title>HardSoft | Tecnología que se adapta a ti</title>
   
   <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,14 +15,14 @@
   
   <style>
     :root {
-      --bg-dark: #090d16;
-      --bg-card: rgba(15, 23, 42, 0.45);
-      --primary: #82b225;
-      --primary-hover: #6a921d;
-      --secondary: #a3e635;
-      --text-white: #ffffff;
-      --text-muted: #94a3b8;
-      --border-color: rgba(255, 255, 255, 0.08);
+      --bg-dark: #f8fafc;
+      --bg-card: #ffffff;
+      --primary: #0055ff;
+      --primary-hover: #004de6;
+      --secondary: #0055ff;
+      --text-white: #0f172a;
+      --text-muted: #475569;
+      --border-color: #e2e8f0;
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -47,7 +47,7 @@
       left: 10%;
       width: 500px;
       height: 500px;
-      background: radial-gradient(circle, rgba(130, 178, 37, 0.15) 0%, rgba(0,0,0,0) 70%);
+      background: radial-gradient(circle, rgba(0, 85, 255, 0.04) 0%, rgba(255,255,255,0) 70%);
       pointer-events: none;
       z-index: 0;
     }
@@ -58,7 +58,7 @@
       right: -10%;
       width: 600px;
       height: 600px;
-      background: radial-gradient(circle, rgba(163, 230, 53, 0.08) 0%, rgba(0,0,0,0) 70%);
+      background: radial-gradient(circle, rgba(0, 85, 255, 0.03) 0%, rgba(255,255,255,0) 70%);
       pointer-events: none;
       z-index: 0;
     }
@@ -74,11 +74,11 @@
 
     /* Header */
     header {
-      padding: 24px 0;
+      padding: 20px 0;
       border-bottom: 1px solid var(--border-color);
       position: sticky;
       top: 0;
-      background: rgba(9, 13, 22, 0.8);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(12px);
       z-index: 100;
     }
@@ -90,7 +90,7 @@
     }
 
     .logo {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 800;
       text-decoration: none;
       color: var(--text-white);
@@ -103,106 +103,113 @@
       color: var(--primary);
     }
 
-    .logo span {
-      background: linear-gradient(135deg, #ffffff 60%, var(--secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .logo-bracket {
+      display: inline-flex;
+      position: relative;
+      padding: 0 4px;
+      font-weight: 800;
     }
 
-    .nav-links {
+    .logo-bracket::before {
+      content: '[';
+      color: var(--primary);
+      margin-right: 2px;
+    }
+
+    .logo-bracket::after {
+      content: ']';
+      color: var(--primary);
+      margin-left: 2px;
+    }
+
+    nav {
       display: flex;
       gap: 32px;
       align-items: center;
     }
 
-    .nav-links a {
+    nav a {
       color: var(--text-muted);
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 0.95rem;
       transition: var(--transition);
     }
 
-    .nav-links a:hover {
-      color: var(--text-white);
+    nav a:hover {
+      color: var(--primary);
     }
 
+    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
       padding: 12px 24px;
-      border-radius: 9999px;
-      font-weight: 600;
+      border-radius: 12px;
+      font-weight: 700;
       text-decoration: none;
       font-size: 0.95rem;
-      transition: var(--transition);
       cursor: pointer;
+      transition: var(--transition);
+      border: none;
     }
 
     .btn-primary {
       background-color: var(--primary);
-      color: var(--bg-dark);
-      border: none;
+      color: #ffffff;
     }
 
     .btn-primary:hover {
-      background-color: var(--secondary);
+      background-color: var(--primary-hover);
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(163, 230, 53, 0.25);
+      box-shadow: 0 8px 20px rgba(0, 85, 255, 0.2);
     }
 
     .btn-outline {
-      background: transparent;
+      border: 1.5px solid var(--border-color);
       color: var(--text-white);
-      border: 1px solid var(--border-color);
+      background-color: transparent;
     }
 
     .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: var(--text-white);
-      transform: translateY(-2px);
+      border-color: var(--primary);
+      color: var(--primary);
+      background-color: rgba(0, 85, 255, 0.02);
     }
 
-    /* Hero Section */
+    /* Hero */
     .hero {
-      padding: 96px 0 80px;
+      padding: 100px 0 60px;
       text-align: center;
       position: relative;
     }
 
-    .badge {
+    .hero-title-badge {
       display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(130, 178, 37, 0.1);
-      border: 1px solid rgba(130, 178, 37, 0.2);
-      color: var(--secondary);
+      background: rgba(0, 85, 255, 0.06);
+      color: var(--primary);
       padding: 6px 16px;
-      border-radius: 9999px;
+      border-radius: 100px;
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 24px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
     .hero h1 {
-      font-size: 3.75rem;
+      font-size: 3.25rem;
       font-weight: 800;
-      line-height: 1.15;
+      line-height: 1.2;
       margin-bottom: 24px;
       letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #ffffff 40%, #a3e635 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
     .hero p {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       color: var(--text-muted);
-      max-width: 750px;
+      max-width: 700px;
       margin: 0 auto 40px;
       font-weight: 400;
       line-height: 1.6;
@@ -212,7 +219,7 @@
       display: flex;
       justify-content: center;
       gap: 16px;
-      margin-bottom: 64px;
+      margin-bottom: 40px;
     }
 
     /* Features */
@@ -230,6 +237,7 @@
       font-size: 2.25rem;
       font-weight: 800;
       margin-bottom: 16px;
+      letter-spacing: -0.01em;
     }
 
     .section-title p {
@@ -241,30 +249,30 @@
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
     }
 
     .feature-card {
       background: var(--bg-card);
-      border: 1px solid var(--border-color);
+      border: 1.5px solid var(--border-color);
       border-radius: 20px;
       padding: 32px;
-      backdrop-filter: blur(8px);
       transition: var(--transition);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.01);
     }
 
     .feature-card:hover {
-      border-color: rgba(163, 230, 53, 0.3);
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 85, 255, 0.06);
     }
 
     .feature-icon {
       width: 56px;
       height: 56px;
-      background: rgba(130, 178, 37, 0.1);
-      color: var(--secondary);
+      background: rgba(0, 85, 255, 0.06);
+      color: var(--primary);
       border-radius: 14px;
       display: flex;
       align-items: center;
@@ -294,87 +302,126 @@
 
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 32px;
-      max-width: 900px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
     .pricing-card {
       background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 24px;
-      padding: 40px;
+      border-radius: 20px;
+      padding: 40px 32px 32px;
       position: relative;
       overflow: hidden;
-      backdrop-filter: blur(8px);
       transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
     }
 
-    .pricing-card.popular {
-      border-color: var(--primary);
-      box-shadow: 0 8px 30px rgba(130, 178, 37, 0.1);
+    /* Card styles matching mockup */
+    .pricing-card.premium-style {
+      border: 2px solid var(--primary);
+      box-shadow: 0 8px 30px rgba(0, 85, 255, 0.08);
+      padding-top: 0;
+    }
+    
+    .pricing-card.standard-style {
+      border: 1.5px solid var(--border-color);
+      padding-top: 0;
     }
 
-    .pricing-card.popular::before {
-      content: 'Recomendado';
-      position: absolute;
-      top: 20px;
-      right: -35px;
+    .pricing-card.premium-style .card-header {
       background: var(--primary);
-      color: var(--bg-dark);
-      font-weight: 700;
-      font-size: 0.75rem;
-      padding: 4px 40px;
-      transform: rotate(45deg);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .pricing-card h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .price {
-      font-size: 2.5rem;
+      color: #ffffff;
+      padding: 16px;
+      margin-left: -32px;
+      margin-right: -32px;
+      text-align: center;
       font-weight: 800;
-      margin: 24px 0;
-      color: var(--text-white);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
     }
 
-    .price span {
-      font-size: 1rem;
-      color: var(--text-muted);
-      font-weight: 500;
+    .pricing-card.standard-style .card-header {
+      background: #ffffff;
+      color: var(--primary);
+      border-bottom: 2.5px solid var(--primary);
+      padding: 16px;
+      margin-left: -32px;
+      margin-right: -32px;
+      text-align: center;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
     }
 
     .pricing-features {
       list-style: none;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
     .pricing-features li {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
-      color: var(--text-muted);
+      gap: 12px;
+      font-size: 0.9rem;
+      color: #334155;
+      font-weight: 500;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 8px;
     }
 
     .pricing-features li i {
-      color: var(--secondary);
+      color: var(--primary);
+      font-size: 1.1rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    .price {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-white);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .price span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Client Showcase */
+    .showcase {
+      padding: 80px 0;
+      border-top: 1px solid var(--border-color);
+      background: #ffffff;
     }
 
     /* Footer */
     footer {
-      padding: 48px 0;
+      padding: 40px 0;
       border-top: 1px solid var(--border-color);
-      background-color: #05080f;
+      background-color: #ffffff;
     }
 
     .footer-wrapper {
@@ -399,32 +446,12 @@
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.9rem;
+      font-weight: 600;
       transition: var(--transition);
     }
 
     .footer-links a:hover {
-      color: var(--text-white);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-      .hero p {
-        font-size: 1.1rem;
-      }
-      .nav-links {
-        display: none;
-      }
-      .hero-ctas {
-        flex-direction: column;
-        align-items: center;
-      }
-      .btn {
-        width: 100%;
-        max-width: 280px;
-      }
+      color: var(--primary);
     }
   </style>
 </head>
@@ -437,36 +464,44 @@
   <header>
     <div class="container nav-wrapper">
       <a href="/" class="logo">
-        <i class="fa-solid fa-palette"></i>
-        <span>Muestrate HS</span>
+        <span class="logo-bracket">HardSoft</span>
       </a>
-      <div class="nav-links">
+      <nav>
+        <a href="#inicio">Inicio</a>
         <a href="#caracteristicas">Características</a>
-        <a href="#clientes">Nuestros Clientes</a>
-        <a href="#planes">Planes</a>
-        <a href="/HardSoft" target="_blank">Demo en Vivo</a>
-        <a href="/admin" class="btn btn-outline">Acceso Admin</a>
-      </div>
+        <a href="#clientes">Clientes</a>
+        <a href="#paquetes">Paquetes</a>
+        <a href="/admin" class="btn btn-outline" style="padding: 8px 18px; border-radius: 8px; font-size: 0.85rem;">
+          <i class="fa-solid fa-user-lock"></i> Consola Admin
+        </a>
+      </nav>
     </div>
   </header>
 
   <!-- Hero Section -->
-  <section class="container hero">
-    <div class="badge">
-      <i class="fa-solid fa-bolt"></i> Constructor de Sitios Web
+  <section class="hero" id="inicio">
+    <div class="container">
+      <div class="hero-title-badge">Tecnología que se adapta a ti</div>
+      <h1>HardSoft</h1>
+      <p>Tu negocio destacado en nuestra plataforma web. Aumenta tu visibilidad y llega a más clientes.</p>
+      <div class="hero-ctas">
+        <a href="#paquetes" class="btn btn-primary">Ver Expositores</a>
+        <a href="#clientes" class="btn btn-outline">Casos de Éxito</a>
+      </div>
     </div>
-    <h1>Tu negocio, en una sola<br>página de presentación</h1>
-    <p>
-      Crea tarjetas de presentación digitales y landing pages profesionales en 5 minutos. 
-      Sube tu catálogo de productos, recibe opiniones de clientes reales, añade tus redes sociales y edita todo en tiempo real.
-    </p>
-    <div class="hero-ctas">
-      <a href="/admin" class="btn btn-primary">
-        Crear mi Página <i class="fa-solid fa-circle-plus"></i>
-      </a>
-      <a href="/HardSoft" target="_blank" class="btn btn-outline">
-        Ver Ejemplo Demo <i class="fa-solid fa-up-right-from-square"></i>
-      </a>
+  </section>
+
+  <!-- Client Showcase Section -->
+  <section class="showcase" id="clientes">
+    <div class="container">
+      <div class="section-title">
+        <h2>Nuestros Clientes</h2>
+        <p>Negocios locales que ya digitalizaron sus catálogos y menús en nuestra plataforma.</p>
+      </div>
+      
+      <div class="features-grid" id="showcase-grid">
+        <!-- Dyn list -->
+      </div>
     </div>
   </section>
 
@@ -474,140 +509,109 @@
   <section class="features" id="caracteristicas">
     <div class="container">
       <div class="section-title">
-        <h2>Todo lo que tu negocio necesita</h2>
-        <p>Olvídate de servidores complejos o código. Te damos una herramienta visual paso a paso pensada para emprendedores.</p>
+        <h2>Todo lo que necesitas</h2>
+        <p>Llevamos tu negocio físico al mundo digital con elegancia y soporte continuo.</p>
       </div>
       
       <div class="features-grid" id="features-grid">
-        <!-- Feature 1 -->
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-palette"></i>
-          </div>
-          <h3>Editor en Tiempo Real</h3>
-          <p>Cambia el color primario, secundario, el tipo de letra y el logotipo de tu portada y mira cómo luce tu sitio al instante en la vista previa interactiva.</p>
-        </div>
-        
-        <!-- Feature 2 -->
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-shop"></i>
-          </div>
-          <h3>Catálogo de Productos</h3>
-          <p>Muestra tus mejores artículos o servicios con su imagen, precio, título y descripción. Los clientes podrán ver tu oferta directamente.</p>
-        </div>
-        
-        <!-- Feature 3 -->
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-          </div>
-          <h3>Asistente Guiado</h3>
-          <p>Nuestro asistente paso a paso te guía rellenando la información básica, eligiendo tu paleta de colores y conectando tus redes sociales.</p>
-        </div>
-        
-        <!-- Feature 4 -->
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-comments"></i>
-          </div>
-          <h3>Reseñas y Calificaciones</h3>
-          <p>Los clientes pueden dejar comentarios sobre tu servicio. Tienes un panel para moderar, aprobar o eliminar reseñas antes de que se hagan públicas.</p>
-        </div>
-        
-        <!-- Feature 5 -->
-        <div class="feature-icon-wrapper feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-share-nodes"></i>
-          </div>
-          <h3>Enlace Corto Único</h3>
-          <p>Comparte tu dirección web única (ej: <code>muestratehs.sytes.net/TuNegocio</code>) en tu biografía de Instagram, TikTok o envíalo directamente por WhatsApp.</p>
-        </div>
-        
-        <!-- Feature 6 -->
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-mobile-screen"></i>
-          </div>
-          <h3>Diseño Adaptivo Premium</h3>
-          <p>Tu página está optimizada para verse increíble y cargar a alta velocidad tanto en computadoras de escritorio como en celulares y tablets.</p>
-        </div>
+        <!-- Dyn list -->
       </div>
     </div>
   </section>
 
-  <!-- Showcase Section -->
-  <section class="showcase" id="clientes" style="padding: 80px 0; border-top: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.15);">
+  <!-- Pricing/Packages Section -->
+  <section class="pricing" id="paquetes">
     <div class="container">
       <div class="section-title">
-        <h2>Emprendimientos que confían en nosotros</h2>
-        <p>Explora las landing pages creadas por nuestros clientes en tiempo real y comprueba sus increíbles resultados.</p>
-      </div>
-      
-      <div id="showcase-grid" class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
-        <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Cargando clientes destacados...</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing Section -->
-  <section class="pricing" id="planes">
-    <div class="container">
-      <div class="section-title">
-        <h2>Planes Simples y Transparentes</h2>
-        <p>Comienza a mostrar tu emprendimiento hoy mismo con el plan que mejor se adapte a ti.</p>
+        <h2>Paquetes y Expositores</h2>
+        <p>Selecciona la solución ideal para digitalizar y presentar tu negocio.</p>
       </div>
       
       <div class="pricing-grid" id="pricing-grid">
-        <!-- Plan 1 -->
-        <div class="pricing-card">
-          <h3>Plan Básico</h3>
-          <p>Ideal para probar y empezar a digitalizarte.</p>
-          <div class="price">$0 <span>/ gratis</span></div>
-          <ul class="pricing-features">
-            <li><i class="fa-solid fa-circle-check"></i> 1 Landing Page única</li>
-            <li><i class="fa-solid fa-circle-check"></i> Hasta 3 productos en catálogo</li>
-            <li><i class="fa-solid fa-circle-check"></i> Sección de contacto y WhatsApp</li>
-            <li><i class="fa-solid fa-circle-xmark" style="color: #ef4444;"></i> Sin asistente guiado</li>
-          </ul>
-          <a href="/admin" class="btn btn-outline" style="width: 100%;">Comenzar Gratis</a>
+        <!-- Dyn list -->
+      </div>
+
+      <!-- Espacio Publicitario Web Banner -->
+      <div class="banner-web" style="display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center; background: #ffffff; border: 1.5px solid var(--border-color); border-radius: 20px; padding: 24px 32px; max-width: 900px; margin: 40px auto 0; box-shadow: 0 4px 20px rgba(0,0,0,0.01);">
+        <div style="width: 56px; height: 56px; background: rgba(0, 85, 255, 0.06); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.75rem;">
+          <i class="fa-solid fa-globe"></i>
         </div>
-        
-        <!-- Plan 2 -->
-        <div class="pricing-card popular">
-          <h3>Plan Emprendedor</h3>
-          <p>Todo el poder de Muestrate HS para tu negocio.</p>
-          <div class="price">$99 <span>/ mes (MXN)</span></div>
-          <ul class="pricing-features">
-            <li><i class="fa-solid fa-circle-check"></i> 1 Landing Page única</li>
-            <li><i class="fa-solid fa-circle-check"></i> Productos ilimitados en catálogo</li>
-            <li><i class="fa-solid fa-circle-check"></i> Asistente de Configuración Guiado</li>
-            <li><i class="fa-solid fa-circle-check"></i> Moderación de opiniones y reseñas</li>
-            <li><i class="fa-solid fa-circle-check"></i> Enlaces a redes sociales y videos</li>
-          </ul>
-          <a href="/admin" class="btn btn-primary" style="width: 100%;">Adquirir Premium</a>
+        <div>
+          <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-white); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em;">Espacio Publicitario Web</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Tu negocio destacado en nuestra plataforma web. Aumenta tu visibilidad y llega a más clientes.</p>
+        </div>
+        <div style="height: 64px; display: flex; align-items: center;">
+          <i class="fa-solid fa-laptop" style="font-size: 3.5rem; color: #cbd5e1;"></i>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Bottom Highlights Bar -->
+  <div class="bottom-highlights" style="border-top: 1px solid var(--border-color); padding: 32px 0; background: #ffffff; border-bottom: 1px solid var(--border-color);">
+    <div class="container" style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 24px;">
+      <div style="display: flex; align-items: center; gap: 12px; max-width: 280px;">
+        <i class="fa-solid fa-shield-halved" style="font-size: 1.5rem; color: var(--primary);"></i>
+        <div>
+          <h5 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: var(--text-white);">Seguridad</h5>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Protegemos tu información</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; max-width: 280px;">
+        <i class="fa-solid fa-handshake" style="font-size: 1.5rem; color: var(--primary);"></i>
+        <div>
+          <h5 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: var(--text-white);">Confianza</h5>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Comprometidos con tu éxito</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; max-width: 280px;">
+        <i class="fa-solid fa-lightbulb" style="font-size: 1.5rem; color: var(--primary);"></i>
+        <div>
+          <h5 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: var(--text-white);">Innovación</h5>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Soluciones que evolucionan contigo</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer>
     <div class="container footer-wrapper">
-      <a href="/" class="logo">
-        <i class="fa-solid fa-palette"></i>
-        <span>Muestrate HS</span>
+      <a href="/" class="logo" style="font-size: 1.25rem;">
+        <span class="logo-bracket">HardSoft</span>
       </a>
-      <div class="footer-text">
-        &copy; 2026 Muestrate HS. Todos los derechos reservados.
-      </div>
+      <div class="footer-text">&copy; 2026 HardSoft. Todos los derechos reservados.</div>
       <div class="footer-links">
-        <a href="/admin">Ingresar al Editor</a>
+        <a href="#inicio">Inicio</a>
+        <a href="#caracteristicas">Características</a>
+        <a href="#paquetes">Paquetes</a>
+        <a href="/admin">Administración</a>
       </div>
     </div>
   </footer>
 
   <script>
+    function getBulletIcon(text) {
+      const t = text.toLowerCase();
+      if (t.includes('expositor')) return 'fa-tablet-screen-button';
+      if (t.includes('navegación') || t.includes('navegacion')) return 'fa-location-arrow';
+      if (t.includes('nfc')) return 'fa-rss';
+      if (t.includes('qr')) return 'fa-qrcode';
+      if (t.includes('diseño') || t.includes('impresión')) return 'fa-print';
+      if (t.includes('soporte')) return 'fa-headset';
+      if (t.includes('google maps') || t.includes('ubicación')) return 'fa-location-dot';
+      if (t.includes('venta')) return 'fa-cart-shopping';
+      if (t.includes('asesoramiento')) return 'fa-user';
+      return 'fa-circle-check';
+    }
+
+    function getPlanIcon(planName) {
+      const name = planName.toLowerCase();
+      if (name.includes('premium')) return 'fa-gem';
+      if (name.includes('medium')) return 'fa-layer-group';
+      return 'fa-star';
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       // 1. Load Muestrate HS (admin) platform homepage details
       try {
@@ -621,12 +625,13 @@
 
           // Update page title & logo/text
           if (info.title) {
-            document.title = `${info.title} | Crea tu Tarjeta de Presentación y Landing Page`;
-            document.querySelectorAll('.logo span').forEach(el => el.textContent = info.title);
+            document.title = `${info.title} | ${info.subtitle || 'Tecnología que se adapta a ti'}`;
+            document.querySelectorAll('.logo-bracket').forEach(el => el.textContent = info.title);
             document.querySelector('.footer-text').innerHTML = `&copy; ${new Date().getFullYear()} ${info.title}. Todos los derechos reservados.`;
           }
           if (info.subtitle) {
-            document.querySelector('.hero h1').innerHTML = info.subtitle.replace('\n', '<br>');
+            document.querySelector('.hero h1').innerHTML = info.title;
+            document.querySelector('.hero-title-badge').textContent = info.subtitle;
           }
           if (info.description) {
             document.querySelector('.hero p').textContent = info.description;
@@ -657,19 +662,49 @@
           // Update pricing grid (from admin products)
           const pricingGrid = document.getElementById('pricing-grid');
           if (pricingGrid && products.length > 0) {
-            pricingGrid.innerHTML = products.map((p, idx) => {
-              const isPopular = idx === 1; // Mark second plan as recommended by default
+            // Sort to ensure Premium -> Medium -> Basic order matching mockup
+            const sortedPlans = [...products].sort((a, b) => {
+              const order = { 'premium': 1, 'medium': 2, 'basic': 3 };
+              const aName = a.name.toLowerCase();
+              const bName = b.name.toLowerCase();
+              return (order[aName] || 99) - (order[bName] || 99);
+            });
+
+            pricingGrid.innerHTML = sortedPlans.map((p) => {
+              const featuresList = p.description.split('.').filter(li => li.trim().length > 0);
+              const countText = featuresList.pop(); // last item is count
+              
+              let number = '1';
+              let label = 'EXPOSITOR FÍSICO';
+              if (countText) {
+                const countParts = countText.trim().split(' ');
+                number = countParts[0];
+                label = countParts.slice(1).join(' ');
+              }
+
+              const isPremium = p.name.toLowerCase() === 'premium';
+
               return `
-                <div class="pricing-card ${isPopular ? 'popular' : ''}">
-                  <h3>${p.name}</h3>
-                  <p>${p.description.split('.')[0]}.</p>
-                  <div class="price">$${p.price} <span>/ ${p.price == 0 ? 'gratis' : 'mes (MXN)'}</span></div>
-                  <ul class="pricing-features">
-                    ${p.description.split('.').slice(1).filter(li => li.trim().length > 0).map(li => `
-                      <li><i class="fa-solid fa-circle-check"></i> ${li.trim()}</li>
-                    `).join('')}
-                  </ul>
-                  <a href="/admin" class="btn ${isPopular ? 'btn-primary' : 'btn-outline'}" style="width: 100%;">${p.price == 0 ? 'Comenzar Gratis' : 'Adquirir Premium'}</a>
+                <div class="pricing-card ${isPremium ? 'premium-style' : 'standard-style'}">
+                  <div>
+                    <div class="card-header">
+                      <i class="fa-solid ${getPlanIcon(p.name)}"></i> ${p.name}
+                    </div>
+                    <ul class="pricing-features">
+                      ${featuresList.map(li => `
+                        <li><i class="fa-solid ${getBulletIcon(li)}"></i> ${li.trim()}</li>
+                      `).join('')}
+                    </ul>
+                  </div>
+                  <div>
+                    <div class="price">$${p.price} <span>/ suscripción</span></div>
+                    <div style="text-align: center; margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                      <img src="${p.image || '/images/acrylic_expositor_mockup.png'}" alt="Expositor" style="max-height: 120px; object-fit: contain; margin-bottom: 12px;">
+                      <div style="font-size: 2rem; font-weight: 800; color: var(--primary); line-height: 1;">${number}</div>
+                      <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">${label}</div>
+                    </div>
+                    <a href="/admin" class="btn ${isPremium ? 'btn-primary' : 'btn-outline'}" style="width: 100%; margin-top: 20px; justify-content: center; border-radius: 8px;">Adquirir</a>
+                  </div>
                 </div>
               `;
             }).join('');
@@ -698,13 +733,13 @@
           return `
             <div class="feature-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; text-align: left;">
               <div>
-                <div style="width: 80px; height: 80px; border-radius: 16px; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--border-color); background: #0f172a; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 80px; height: 80px; border-radius: 16px; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--border-color); background: #f8fafc; display: flex; align-items: center; justify-content: center;">
                   <img src="${logo}" alt="${b.title}" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=256&auto=format&fit=crop'">
                 </div>
                 <h3 style="font-size: 1.2rem; margin-bottom: 8px;">${b.title}</h3>
                 <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px; font-weight: normal;">${b.subtitle || 'Tarjeta de presentación digital'}</p>
               </div>
-              <a href="/${b.businessId}" target="_blank" class="btn btn-outline" style="width: 100%; padding: 8px 16px; font-size: 0.85rem; justify-content: center; gap: 6px; text-align: center;">
+              <a href="/${b.businessId}" target="_blank" class="btn btn-outline" style="width: 100%; padding: 8px 16px; font-size: 0.85rem; justify-content: center; gap: 6px; text-align: center; border-radius: 8px;">
                 Visitar Sitio <i class="fa-solid fa-up-right-from-square" style="font-size: 0.75rem;"></i>
               </a>
             </div>

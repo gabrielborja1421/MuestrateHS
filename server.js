@@ -30,34 +30,35 @@ dbInstance.exec(`
 const checkAdmin = dbInstance.prepare("SELECT * FROM businesses WHERE id = 'admin'").get();
 
 const defaultTheme = JSON.stringify({
-  primaryColor: '#82b225',
-  secondaryColor: '#a3e635',
-  backgroundColor: '#090d16',
-  textColor: '#ffffff',
+  primaryColor: '#0055ff',
+  secondaryColor: '#004de6',
+  backgroundColor: '#ffffff',
+  textColor: '#0f172a',
   fontFamily: 'Plus Jakarta Sans'
 });
 
 const defaultInfo = JSON.stringify({
-  title: 'Muestrate HS',
-  subtitle: 'Tu negocio, en una sola página de presentación',
-  description: 'Crea tarjetas de presentación digitales y landing pages profesionales en 5 minutos. Sube tu catálogo de productos, recibe opiniones de clientes reales, añade tus redes sociales y edita todo en tiempo real.',
-  email: 'contacto@muestratehs.com',
-  phone: '55-1234-5678',
-  address: 'Ciudad de México',
-  ctaText: 'Crear mi Página',
+  title: 'HardSoft',
+  subtitle: 'TECNOLOGÍA QUE SE ADAPTA A TI',
+  description: 'Tu negocio destacado en nuestra plataforma web. Aumenta tu visibilidad y llega a más clientes.',
+  email: 'soporte@hardsoft.com',
+  phone: '961-673-2990',
+  address: 'México',
+  ctaText: 'Ver Expositores',
   socialFacebook: 'https://facebook.com',
   socialInstagram: 'https://instagram.com'
 });
 
 const defaultFeatures = JSON.stringify([
-  { id: 'f1', title: 'Editor en Tiempo Real', icon: 'fa-palette', description: 'Cambia colores, fuentes y logos y mira el resultado al instante.' },
-  { id: 'f2', title: 'Catálogo de Productos', icon: 'fa-shop', description: 'Muestra tus artículos o servicios con su imagen, precio y descripción.' },
-  { id: 'f3', title: 'Asistente Guiado', icon: 'fa-wand-magic-sparkles', description: 'Nuestro asistente te guía rellenando la información paso a paso.' }
+  { id: 'f1', title: 'Expositor Físico', icon: 'fa-qrcode', description: 'Expositores acrílicos elegantes con tecnología QR y NFC integrada.' },
+  { id: 'f2', title: 'Navegación Intuitiva', icon: 'fa-location-arrow', description: 'Tus clientes acceden de inmediato a tu menú o catálogo digital.' },
+  { id: 'f3', title: 'Soporte y Garantía', icon: 'fa-headset', description: 'Asistencia especializada y configuración de tus expositores.' }
 ]);
 
 const defaultProducts = JSON.stringify([
-  { id: 'p1', name: 'Plan Básico', price: 0, description: 'Ideal para probar. Incluye 1 Landing Page, 3 productos, contacto y WhatsApp.', image: '' },
-  { id: 'p2', name: 'Plan Emprendedor', price: 99, description: 'Productos ilimitados, asistente de configuración, reseñas y redes sociales.', image: '' }
+  { id: 'plan_premium', name: 'PREMIUM', price: 1499, description: 'Expositor físico QR + NFC.Navegación.NFC.QR.Diseño e impresión.Soporte.Google Maps.Punto de venta.3 EXPOSITORES FÍSICOS', image: '/images/acrylic_expositor_mockup.png' },
+  { id: 'plan_medium', name: 'MEDIUM', price: 999, description: 'Expositor físico QR + NFC.Navegación.NFC.QR.Asesoramiento.Soporte.Google Maps.2 EXPOSITORES FÍSICOS', image: '/images/acrylic_expositor_mockup.png' },
+  { id: 'plan_basic', name: 'BASIC', price: 499, description: 'Expositor físico QR.Navegación.QR.Asesoramiento.Soporte.1 EXPOSITOR FÍSICO', image: '/images/acrylic_expositor_mockup.png' }
 ]);
 
 if (!checkAdmin) {
@@ -69,17 +70,17 @@ if (!checkAdmin) {
   insertAdmin.run('admin', defaultHash, defaultTheme, defaultInfo, defaultFeatures, defaultProducts);
   console.log('Seeder: Usuario "admin" maestro creado por defecto con clave "admin123" y datos de plataforma.');
 } else {
-  // If admin exists but has no configured platform title, seed it
+  // If admin exists but doesn't have the new title 'HardSoft', update it to keep the DB in sync
   let parsedInfo = {};
   try { parsedInfo = JSON.parse(checkAdmin.info || '{}'); } catch(e){}
-  if (!parsedInfo.title) {
+  if (!parsedInfo.title || parsedInfo.title !== 'HardSoft') {
     const updateAdmin = dbInstance.prepare(`
       UPDATE businesses SET 
         theme = ?, info = ?, features = ?, products = ?
       WHERE id = 'admin'
     `);
     updateAdmin.run(defaultTheme, defaultInfo, defaultFeatures, defaultProducts);
-    console.log('Seeder: Datos de plataforma de Muestrate HS inyectados en la cuenta admin existente.');
+    console.log('Seeder: Datos de plataforma de HardSoft inyectados/actualizados en la cuenta admin existente.');
   }
 }
 

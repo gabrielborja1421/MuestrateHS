@@ -259,6 +259,12 @@ function renderClientPage(targetDoc = document) {
   const copyrightEl = targetDoc.getElementById('footer-copyright');
   if (copyrightEl) copyrightEl.textContent = info.title;
   
+  const footerTitleEl = targetDoc.getElementById('view-footer-title');
+  if (footerTitleEl) footerTitleEl.textContent = info.title || 'Mi Negocio';
+  
+  const footerDescEl = targetDoc.getElementById('view-footer-desc');
+  if (footerDescEl) footerDescEl.textContent = info.subtitle || '';
+  
   const yearEl = targetDoc.getElementById('footer-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
   

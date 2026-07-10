@@ -1,12 +1,30 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 const bcrypt = require('bcryptjs');
+const { DatabaseSync } = require('node:sqlite');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DB_PATH = path.join(__dirname, 'data', 'database.json');
+const DB_SQLITE_PATH = path.join(__dirname, 'data', 'database.db');
+const dbInstance = new DatabaseSync(DB_SQLITE_PATH);
+
+// Ensure the table exists in SQLite
+dbInstance.exec(`
+  CREATE TABLE IF NOT EXISTS businesses (
+    id TEXT PRIMARY KEY,
+    password TEXT NOT NULL,
+    isSuperAdmin INTEGER DEFAULT 0,
+    theme TEXT,
+    info TEXT,
+    features TEXT,
+    carouselImages TEXT,
+    products TEXT,
+    reviews TEXT,
+    videos TEXT
+  )
+`);
 
 app.use(cors());
 app.use((req, res, next) => {
@@ -23,24 +41,86 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 // In-memory active sessions: token -> businessId
 const activeSessions = new Map();
 
-// Helper helper function to read db safely
+// Helper helper function to read db safely from SQLite
 function readDatabase() {
   try {
-    const data = fs.readFileSync(DB_PATH, 'utf8');
-    return JSON.parse(data);
+    const query = dbInstance.prepare('SELECT * FROM businesses');
+    const rows = query.all();
+    const data = {};
+    for (const row of rows) {
+      if (row.isSuperAdmin) {
+        data[row.id] = {
+          password: row.password,
+          isSuperAdmin: true
+        };
+      } else {
+        data[row.id] = {
+          password: row.password,
+          theme: JSON.parse(row.theme || '{}'),
+          info: JSON.parse(row.info || '{}'),
+          features: JSON.parse(row.features || '[]'),
+          carouselImages: JSON.parse(row.carouselImages || '[]'),
+          products: JSON.parse(row.products || '[]'),
+          reviews: JSON.parse(row.reviews || '[]'),
+          videos: JSON.parse(row.videos || '[]')
+        };
+      }
+    }
+    return data;
   } catch (error) {
-    console.error('Error al leer la base de datos:', error);
+    console.error('Error al leer SQLite:', error);
     return {};
   }
 }
 
-// Helper to write db safely
+// Helper to write db safely to SQLite
 function writeDatabase(data) {
   try {
-    fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
+    const existingKeysQuery = dbInstance.prepare('SELECT id FROM businesses');
+    const existingKeys = existingKeysQuery.all().map(row => row.id);
+    
+    const insertStmt = dbInstance.prepare(`
+      INSERT INTO businesses (id, password, isSuperAdmin, theme, info, features, carouselImages, products, reviews, videos)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET
+        password = excluded.password,
+        isSuperAdmin = excluded.isSuperAdmin,
+        theme = excluded.theme,
+        info = excluded.info,
+        features = excluded.features,
+        carouselImages = excluded.carouselImages,
+        products = excluded.products,
+        reviews = excluded.reviews,
+        videos = excluded.videos
+    `);
+    
+    const deleteStmt = dbInstance.prepare('DELETE FROM businesses WHERE id = ?');
+    
+    for (const [id, value] of Object.entries(data)) {
+      const isSuperAdmin = value.isSuperAdmin ? 1 : 0;
+      insertStmt.run(
+        id,
+        value.password,
+        isSuperAdmin,
+        JSON.stringify(value.theme || {}),
+        JSON.stringify(value.info || {}),
+        JSON.stringify(value.features || []),
+        JSON.stringify(value.carouselImages || []),
+        JSON.stringify(value.products || []),
+        JSON.stringify(value.reviews || []),
+        JSON.stringify(value.videos || [])
+      );
+    }
+    
+    const currentKeys = Object.keys(data);
+    for (const key of existingKeys) {
+      if (!currentKeys.includes(key)) {
+        deleteStmt.run(key);
+      }
+    }
     return true;
   } catch (error) {
-    console.error('Error al escribir en la base de datos:', error);
+    console.error('Error al escribir SQLite:', error);
     return false;
   }
 }

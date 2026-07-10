@@ -1,0 +1,207 @@
+{
+  "admin": {
+    "password": "$2a$10$fd9nKq819aFMwzjYuBNpI.pBEYFwFUIKEoZhd8o14Fu9A6VPXeYmG",
+    "isSuperAdmin": true
+  },
+  "HardSoft": {
+    "password": "$2a$10$oS5hQQeKPt1C.y.pXE2lweDBovIbKb0XAMHt1gFwZsfX3GocB.O82",
+    "theme": {
+      "primaryColor": "#3700ff",
+      "secondaryColor": "#4400ff",
+      "backgroundColor": "#cad1d8",
+      "textColor": "#0f172a",
+      "navBgColor": "#ffffff",
+      "footerBgColor": "#3a3f4a",
+      "cardBgColor": "#ffd6d6",
+      "fontFamily": "Plus Jakarta Sans",
+      "buttonStyle": "rounded",
+      "carouselType": "slide",
+      "pageLayout": "classic",
+      "logoType": "logo",
+      "visibleSections": {
+        "features": true,
+        "carousel": true,
+        "products": true,
+        "reviews": true,
+        "heroLogo": true,
+        "videos": true
+      },
+      "logoSize": "large",
+      "cardSize": "large",
+      "fontSize": "large",
+      "carouselHeight": "aspect",
+      "heroLogoSize": "large"
+    },
+    "info": {
+      "title": "",
+      "subtitle": "tecnologia que ayuda",
+      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVpzvNickngkNukJxBDzIANQ-6sJ1uyZwhH-C3GeBBy1GOQBoH6uBMVBIg&s=10",
+      "description": "Transformamos tus ideas en objetos físicos con tecnología de punta. Especialistas en grabado láser de alta precisión y modelado/impresión 3D en diversos materiales.",
+      "email": "Soporte@hardsoft.com.mx",
+      "phone": "961-673-2990",
+      "address": "avenida colima n1341",
+      "heroBgType": "color",
+      "heroBgImage": "",
+      "heroBgColor": "#2bff00",
+      "heroGradientStart": "#52750f",
+      "heroGradientEnd": "#0f172a",
+      "heroTextAlign": "center",
+      "ctaText": "Ver Catálogo",
+      "socialFacebook": "https://www.facebook.com/marketplace/?ref=app_tab&locale=es_LA",
+      "socialInstagram": "https://www.facebook.com/marketplace/?ref=app_tab&locale=es_LA",
+      "socialWhatsapp": "+529616732990",
+      "socialTwitter": ""
+    },
+    "features": [
+      {
+        "id": "feat_1",
+        "title": "Calidad Garantizada",
+        "icon": "fa-gear",
+        "description": "Utilizamos los mejores materiales y tecnología de punta para asegurar resultados impecables."
+      },
+      {
+        "id": "feat_2",
+        "icon": "fa-clock",
+        "title": "Entrega Rápida",
+        "description": "Respetamos tus tiempos. Nos comprometemos a entregar tus pedidos a la brevedad posible."
+      },
+      {
+        "id": "feat_3",
+        "icon": "fa-user-shield",
+        "title": "Atención Personalizada",
+        "description": "Te acompañamos en todo el proceso para dar vida a tus ideas tal como las imaginaste."
+      }
+    ],
+    "carouselImages": [
+      "/images/carrusel1.jpg",
+      "/images/carrusel2.jpg",
+      "/images/carrusel3.jpg",
+      "/uploads/upload_1783566082038_ywmv.png"
+    ],
+    "products": [
+      {
+        "id": "prod_1",
+        "name": "Llaveros Grabados en Madera",
+        "description": "Llaveros de madera de nogal grabados con láser de alta precisión. Ideales para recuerdos o marcas.",
+        "price": 45,
+        "image": "/images/producto1.jpg"
+      },
+      {
+        "id": "prod_2",
+        "name": "Impresión 3D de Figuras de Colección",
+        "price": 900,
+        "image": "/images/producto2.jpg",
+        "description": "Figuras detalladas impresas en resina de alta resolución, listas para pintar."
+      },
+      {
+        "id": "prod_3",
+        "name": "Lámpara de Acrílico LED Personalizada",
+        "description": "Lámpara con base de madera y acrílico grabado con el diseño o logotipo de tu elección.",
+        "price": 480,
+        "image": "/images/producto3.jpg"
+      },
+      {
+        "id": "prod_1783559940930",
+        "name": "hola",
+        "price": 150,
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVpzvNickngkNukJxBDzIANQ-6sJ1uyZwhH-C3GeBBy1GOQBoH6uBMVBIg&s=10",
+        "description": ""
+      }
+    ],
+    "reviews": [
+      {
+        "id": "rev_1",
+        "name": "Sofía Martínez",
+        "rating": 5,
+        "comment": "¡El llavero grabado quedó hermoso! Superó mis expectativas y el servicio fue muy rápido.",
+        "contact": "sofia.mtz@mail.com"
+      },
+      {
+        "id": "rev_2",
+        "name": "Alejandro Ruiz",
+        "rating": 4,
+        "comment": "Excelente calidad de impresión 3D en resina. Detalles muy finos. Volveré a comprar.",
+        "contact": "55-9876-5432"
+      }
+    ],
+    "videos": [
+      {
+        "id": "vid_1",
+        "title": "Demostración de Grabado Láser",
+        "description": "Mira la velocidad y precisión de nuestra grabadora láser de fibra óptica.",
+        "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      }
+    ]
+  },
+  "KeDulce": {
+    "password": "$2a$10$qJXenKBKgFg8ivbtdG1m5u7Akl7jp2/2M5pYfM.YGck2qs/UiLUbS",
+    "theme": {
+      "primaryColor": "#52750f",
+      "secondaryColor": "#a3e635",
+      "backgroundColor": "#f8fafc",
+      "textColor": "#0f172a",
+      "navBgColor": "#ffffff",
+      "footerBgColor": "#0f172a",
+      "cardBgColor": "#ffffff",
+      "fontFamily": "Plus Jakarta Sans",
+      "buttonStyle": "rounded",
+      "carouselType": "slide",
+      "logoType": "both",
+      "logoSize": "medium",
+      "heroLogoSize": "medium",
+      "cardSize": "medium",
+      "fontSize": "medium",
+      "carouselHeight": "aspect",
+      "visibleSections": {
+        "features": true,
+        "carousel": true,
+        "products": true,
+        "reviews": true,
+        "heroLogo": true,
+        "videos": true
+      }
+    },
+    "info": {
+      "title": "Kedulce",
+      "subtitle": "Reposteria",
+      "logoUrl": "",
+      "description": "Bienvenidos a nuestra página comercial oficial. Ofrecemos los mejores servicios y productos adaptados a tus necesidades.",
+      "phone": "",
+      "whatsapp": "",
+      "facebook": "",
+      "instagram": "",
+      "twitter": "",
+      "address": "",
+      "mapEmbedUrl": "",
+      "email": "",
+      "heroBgType": "color",
+      "heroBgImage": "",
+      "heroBgColor": "#0f172a",
+      "heroGradientStart": "#52750f",
+      "heroGradientEnd": "#0f172a",
+      "heroTextAlign": "center",
+      "ctaText": "Ver Catálogo"
+    },
+    "features": [
+      {
+        "id": "f1",
+        "title": "Atención 100% Personalizada",
+        "description": "Nos adaptamos a las necesidades únicas de cada uno de nuestros clientes."
+      },
+      {
+        "id": "f2",
+        "title": "Calidad Garantizada",
+        "description": "Trabajamos bajo los más altos estándares utilizando materiales premium."
+      },
+      {
+        "id": "f3",
+        "title": "Soporte y Respuestas Rápidas",
+        "description": "Estamos listos para atender tus dudas al instante por WhatsApp o correo."
+      }
+    ],
+    "carouselImages": [],
+    "products": [],
+    "videos": [],
+    "reviews": []
+  }
+}

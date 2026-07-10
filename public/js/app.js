@@ -1263,12 +1263,20 @@ function setupPreviewPane() {
     const iframeDoc = getPreviewDocument();
     if (!iframeDoc) return;
     
-    renderClientPage(iframeDoc);
-    setupMobileMenu(iframeDoc);
-    setupReviewForm(iframeDoc);
+    // Only initialize template features if not super-admin editing the platform main landing page
+    if (currentBusinessId.toLowerCase() !== 'admin') {
+      renderClientPage(iframeDoc);
+      setupMobileMenu(iframeDoc);
+      setupReviewForm(iframeDoc);
+    }
   };
   
-  iframe.src = `/${currentBusinessId}`;
+  // If editing the platform landing page, point iframe to root '/' to prevent loops
+  if (currentBusinessId.toLowerCase() === 'admin') {
+    iframe.src = '/';
+  } else {
+    iframe.src = `/${currentBusinessId}`;
+  }
 }
 
 function populateEditorInputs() {

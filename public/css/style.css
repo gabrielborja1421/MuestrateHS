@@ -1556,6 +1556,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .preview-url-indicator i { color: #10b981; }
 
+.preview-url-indicator:hover {
+  background-color: #1e293b;
+  border-color: var(--secondary-color);
+  color: #ffffff;
+}
+
 .preview-frame-container {
   flex-grow: 1;
   display: flex;

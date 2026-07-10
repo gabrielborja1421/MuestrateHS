@@ -1168,7 +1168,12 @@ async function loadAdminDashboard() {
   document.getElementById('superadmin-workspace').style.display = 'none';
   document.getElementById('editor-workspace').style.display = 'grid';
   
-  document.getElementById('preview-url-text').textContent = `muestrate.com.mx/${currentBusinessId}`;
+  const currentHost = window.location.host;
+  document.getElementById('preview-url-text').textContent = `${currentHost}/${currentBusinessId}`;
+  const previewLink = document.getElementById('preview-url-link');
+  if (previewLink) {
+    previewLink.href = `/${currentBusinessId}`;
+  }
   document.getElementById('admin-business-title').textContent = currentBusinessId;
   
   showLoading(true, 'Cargando tu editor...');

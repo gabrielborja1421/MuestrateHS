@@ -442,6 +442,7 @@
       </a>
       <div class="nav-links">
         <a href="#caracteristicas">Características</a>
+        <a href="#clientes">Nuestros Clientes</a>
         <a href="#planes">Planes</a>
         <a href="/HardSoft" target="_blank">Demo en Vivo</a>
         <a href="/admin" class="btn btn-outline">Acceso Admin</a>
@@ -466,12 +467,6 @@
       <a href="/HardSoft" target="_blank" class="btn btn-outline">
         Ver Ejemplo Demo <i class="fa-solid fa-up-right-from-square"></i>
       </a>
-    </div>
-    
-    <!-- Hero Mockup Preview Image -->
-    <div class="hero-image-wrapper" style="margin-top: 56px; display: flex; justify-content: center; position: relative;">
-      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; height: 80%; background: radial-gradient(circle, rgba(130, 178, 37, 0.2) 0%, rgba(0,0,0,0) 70%); filter: blur(30px); pointer-events: none; z-index: 0;"></div>
-      <img src="/images/platform_hero_preview.png" alt="Muestrate HS Mockup" style="max-width: 100%; width: 850px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); position: relative; z-index: 1;">
     </div>
   </section>
 
@@ -541,6 +536,20 @@
     </div>
   </section>
 
+  <!-- Showcase Section -->
+  <section class="showcase" id="clientes" style="padding: 80px 0; border-top: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.15);">
+    <div class="container">
+      <div class="section-title">
+        <h2>Emprendimientos que confían en nosotros</h2>
+        <p>Explora las landing pages creadas por nuestros clientes en tiempo real y comprueba sus increíbles resultados.</p>
+      </div>
+      
+      <div id="showcase-grid" class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+        <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Cargando clientes destacados...</div>
+      </div>
+    </div>
+  </section>
+
   <!-- Pricing Section -->
   <section class="pricing" id="planes">
     <div class="container">
@@ -597,6 +606,48 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('/api/public/businesses');
+        if (!response.ok) throw new Error('Error al cargar clientes');
+        const list = await response.json();
+        
+        const grid = document.getElementById('showcase-grid');
+        if (!grid) return;
+        
+        if (list.length === 0) {
+          grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Aún no hay clientes registrados. ¡Sé el primero!</div>';
+          return;
+        }
+        
+        grid.innerHTML = list.map(b => {
+          const logo = b.logoUrl ? b.logoUrl : 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=256&auto=format&fit=crop';
+          return `
+            <div class="feature-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; text-align: left;">
+              <div>
+                <div style="width: 80px; height: 80px; border-radius: 16px; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--border-color); background: #0f172a; display: flex; align-items: center; justify-content: center;">
+                  <img src="${logo}" alt="${b.title}" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=256&auto=format&fit=crop'">
+                </div>
+                <h3 style="font-size: 1.2rem; margin-bottom: 8px;">${b.title}</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px; font-weight: normal;">${b.subtitle || 'Tarjeta de presentación digital'}</p>
+              </div>
+              <a href="/${b.businessId}" target="_blank" class="btn btn-outline" style="width: 100%; padding: 8px 16px; font-size: 0.85rem; justify-content: center; gap: 6px; text-align: center;">
+                Visitar Sitio <i class="fa-solid fa-up-right-from-square" style="font-size: 0.75rem;"></i>
+              </a>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Error al cargar clientes:', err);
+        const grid = document.getElementById('showcase-grid');
+        if (grid) {
+          grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Error al cargar la lista de clientes.</div>';
+        }
+      }
+    });
+  </script>
 
 </body>
 </html>

@@ -277,6 +277,23 @@ app.post('/api/auth/register', (req, res) => {
   }
 });
 
+// 2.5 Get List of Public Business Profiles (Showcase)
+app.get('/api/public/businesses', (req, res) => {
+  const db = readDatabase();
+  const list = Object.keys(db)
+    .filter(k => k.toLowerCase() !== 'admin')
+    .map(key => {
+      const info = db[key].info || {};
+      return {
+        businessId: key,
+        title: info.title || key,
+        subtitle: info.subtitle || '',
+        logoUrl: info.logoUrl || ''
+      };
+    });
+  res.json(list);
+});
+
 // 3. Get Public Business Data
 app.get('/api/business/:id', (req, res) => {
   const { id } = req.params;

@@ -1,6 +1,8 @@
 // Global state variables
 let currentBusinessId = '';
 let authToken = '';
+let isSuperAdminEditing = false;
+let superAdminSavedId = 'admin';
 let activeCarouselInterval = null;
 
 // Editor State (WordPress Schema)
@@ -1907,6 +1909,24 @@ function setupWorkspaceActions() {
     logout();
   });
   
+  const superadminBackBtn = document.getElementById('superadmin-back-btn');
+  if (superadminBackBtn) {
+    superadminBackBtn.addEventListener('click', () => {
+      isSuperAdminEditing = false;
+      currentBusinessId = 'admin';
+      
+      // Hide editor workspace, show superadmin workspace
+      document.getElementById('editor-workspace').style.display = 'none';
+      document.getElementById('superadmin-workspace').style.display = 'grid';
+      
+      // Hide back button
+      superadminBackBtn.style.display = 'none';
+      
+      // Reload superadmin dashboard
+      loadSuperAdminDashboard();
+    });
+  }
+  
   document.getElementById('save-changes-btn').addEventListener('click', async () => {
     showLoading(true, 'Guardando cambios en la base de datos...');
     try {
@@ -2501,6 +2521,23 @@ async function loadSuperAdminDashboard() {
   await fetchMasterBusinesses();
 }
 
+function superAdminEditBusiness(businessId) {
+  isSuperAdminEditing = true;
+  superAdminSavedId = 'admin';
+  currentBusinessId = businessId;
+  
+  // Hide superadmin workspace, show editor workspace
+  document.getElementById('superadmin-workspace').style.display = 'none';
+  document.getElementById('editor-workspace').style.display = 'grid';
+  
+  // Show back button
+  const backBtn = document.getElementById('superadmin-back-btn');
+  if (backBtn) backBtn.style.display = 'inline-flex';
+  
+  // Load workspace data for this client business
+  setupAdminEditorWorkspace();
+}
+
 async function fetchMasterBusinesses() {
   try {
     const response = await fetch('/api/admin/businesses', {
@@ -2557,6 +2594,9 @@ function renderMasterBusinessList() {
         <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 9999px;">${business.reviewsCount}</span>
       </td>
       <td style="text-align: right; white-space: nowrap;">
+        <button class="btn-action-sm btn-edit-page" data-id="${business.businessId}" style="background-color: #82b225; color: #090d16; border: none; font-weight: 600; margin-right: 4px; padding: 4px 10px; border-radius: 4px; cursor: pointer;">
+          <i class="fa-solid fa-pen"></i> Editar
+        </button>
         <button class="btn-action-sm btn-warning btn-reset-pass" data-id="${business.businessId}">
           <i class="fa-solid fa-key"></i> Llave
         </button>
@@ -2565,6 +2605,11 @@ function renderMasterBusinessList() {
         </button>
       </td>
     `;
+    
+    // Bind edit page
+    tr.querySelector('.btn-edit-page').addEventListener('click', () => {
+      superAdminEditBusiness(business.businessId);
+    });
     
     // Bind reset password
     tr.querySelector('.btn-reset-pass').addEventListener('click', () => {
